@@ -1,0 +1,46 @@
+.auth-input {
+  position: relative;
+  display: block;
+  margin-bottom: 2rem;
+  &__title {
+    display: block;
+    font-size: 1.7rem;
+    font-weight: 400;
+    color: #225171;
+    padding-bottom: .2rem;
+  }
+  &__input {
+    padding: 0 .2rem;
+    position: relative;
+    width: 100%;
+    border: .1rem solid #EDEDED;
+    border-radius: .5rem;
+    height: 3.8rem;
+    color: #225171;
+    font-size: 1.4rem;
+    &:focus {
+      outline: none;
+    }
+    &:focus + .auth-input__focus::before {
+      width: 100%;
+      left: 0;
+    }
+  }
+  &__focus {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: .3rem;
+    &::before {
+      content: "";
+      position: absolute;
+      width: 0;
+      height: .3rem;
+      bottom: 0;
+      right: 0;
+      background: #2376CA;
+      transition: all 0.3s;
+    }
+  }
+}
