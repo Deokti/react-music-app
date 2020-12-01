@@ -33,15 +33,16 @@ const Login: React.FC = () => {
   }
 
   const logIn = ({ email, password }: TLoginUser) => {
-    try {
-      auth.signInWithEmailAndPassword(email, password);
-      setLoading(false);
-      console.log('Пользователь вошёл в систему');
-    } catch (error) {
-      console.error(error);
-      setError(error.message);
-      setLoading(false);
-    }
+    auth.signInWithEmailAndPassword(email, password)
+      .then(() => {
+        console.log('Пользователь вошёл в систему');
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error(error);
+        setError(error.message);
+        setLoading(false);
+      })
   }
 
   const onSubmitHandler = (event: React.FormEvent<HTMLFormElement>) => {

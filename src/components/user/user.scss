@@ -1,0 +1,29 @@
+.user {
+  display: flex;
+  &__information {
+    padding-right: 1.3rem;
+  }
+  &__name {
+    font-size: 1.7rem;
+    font-weight: 600;
+  }
+  &__description {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    cursor: pointer;
+    font-weight: 300;
+    font-size: 1.2rem;
+    padding-top: .2rem;
+    span {
+      padding-right: 1rem;
+    }
+  }
+  &__image {
+    width: 3.5rem;
+    img {
+      width: 100%;
+      border-radius: 100%;
+    }
+  }
+}

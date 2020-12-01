@@ -1,6 +1,6 @@
 import React, { memo } from 'react';
 
-const UserIcon = ({ color = '#9F9DA3' }) => {
+const UserIcon = ({ color = '#000' }) => {
   return (
     <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
       <g clipPath="url(#clip0)">

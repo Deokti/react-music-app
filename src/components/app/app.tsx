@@ -1,17 +1,16 @@
 import React from 'react';
-import { TDatabaseSaveUser } from '../../types';
+import Header from '../header';
 
+
+import { TLogInUser } from '../../types';
 import './app.scss';
+import { themeBackground } from '../../theme';
 
-type TFCApp = {
-  logInUser: TDatabaseSaveUser | null | undefined
-}
-
-const App: React.FC<TFCApp> = ({ logInUser }: TFCApp) => {
+const App: React.FC<TLogInUser> = ({ logInUser }: TLogInUser) => {
 
   return (
-    <section className="app">
-      <h1 style={{ fontSize: '10rem', textAlign: 'center' }}>Главная страница</h1>
+    <section className={`app ${themeBackground(logInUser?.darkTheme)}`}>
+      <Header logInUser={logInUser} />
     </section>
   )
 };

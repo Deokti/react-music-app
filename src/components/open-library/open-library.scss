@@ -1,0 +1,11 @@
+.open-library {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  &__text {
+    display: block;
+    padding-left: 1rem;
+    font-size: 1.8rem;
+    color: #000;
+  }
+}

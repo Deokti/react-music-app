@@ -17,3 +17,8 @@ export type TDatabaseSaveUser = {
   password: string
   username: string
 }
+
+export type TLogInUser = {
+  logInUser: TDatabaseSaveUser | null | undefined
+}
+

@@ -1,4 +1,6 @@
 .auth-input__focus,
-.button {
+.button,
+.toggle-switch,
+.toggle-switch__circle {
   transition: all .25s cubic-bezier(.02,.01,.47,1);
 }

@@ -1,33 +1,56 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
-import { Route, withRouter, Switch, Redirect } from 'react-router-dom';
+import { Route, withRouter, Switch } from 'react-router-dom';
 import App from './components/app';
 import { Login, Register } from './components/auth';
+import Spinner from './components/spinner';
 import { auth, database } from './config/firebase';
 
 import { routePath } from './config/router-path';
 import { TDatabaseSaveUser } from './types';
 
-const MainRoot: React.FC = ({ history }: any) => {
-  const [logInUser, setLogInUser] = useState<TDatabaseSaveUser | null>();
+type TFCMainRoot = {
+  history: any
+}
 
-  const getDataUserDatabase = async (uid: string) => {
+type TLoggedUser = {
+  isLoaded: boolean
+  logInUser: TDatabaseSaveUser | null
+}
+
+const MainRoot: React.FC<TFCMainRoot> = ({ history }: TFCMainRoot) => {
+  const [loggedUser, setLoggedUser] = useState<TLoggedUser>({
+    isLoaded: true,
+    logInUser: null
+  });
+
+  const getDataUserDatabase = useCallback((uid: string) => {
     return database.ref("USERS")
       .child(uid)
-      .on('value', (snap) => setLogInUser(snap.val()));
-  }
+      .on('value', (snap) => {
+        setLoggedUser({
+          isLoaded: false,
+          logInUser: snap.val()
+        });
+      });
+  }, [])
+
 
   const onAuthStateChanged = useCallback(() => {
-    auth.onAuthStateChanged((currentUser) => {
+    auth.onAuthStateChanged((currentUser: any) => {
       if (currentUser) {
         const uid = currentUser.uid;
         getDataUserDatabase(uid);
         history.push(routePath.main);
       } else {
+        setLoggedUser({
+          isLoaded: false,
+          logInUser: null
+        });
         history.push(routePath.login)
       }
     });
-  }, [history]);
+  }, [getDataUserDatabase, history]);
 
 
   useEffect(() => {
@@ -40,13 +63,19 @@ const MainRoot: React.FC = ({ history }: any) => {
 
   return (
     <main className="main-root">
-      <Switch>
-        <Route path={routePath.main} exact render={() => (<App logInUser={logInUser} />)} />
-        <Route path={routePath.login} component={Login} />
-        <Route path={routePath.register} component={Register} />
-      </Switch>
+      {
+        loggedUser.isLoaded
+          ? <Spinner />
+          : (<Switch>
+            <Route path={routePath.main} exact render={() => (<App logInUser={loggedUser.logInUser} />)} />
+            <Route path={routePath.login} component={Login} />
+            <Route path={routePath.register} component={Register} />
+          </Switch>)
+      }
     </main>
   )
 };
 
+
 export default withRouter(MainRoot);
+
