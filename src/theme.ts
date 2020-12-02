@@ -17,3 +17,7 @@ export const themeDescriptionColor = (themeDark: boolean | undefined) => {
 export const themeHover = (themeDark: boolean | undefined) => {
   return themeDark ? 'hover-dark' : 'hover-light';
 }
+
+export const iconTheme = (themeDark: boolean | undefined) => {
+  return themeDark ? '#fff' : '#000';
+}

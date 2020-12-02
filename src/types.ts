@@ -22,3 +22,11 @@ export type TLogInUser = {
   logInUser: TDatabaseSaveUser | null | undefined
 }
 
+export type TSong = {
+  name: string,
+  cover: string
+  artist: string,
+  audio: string,
+  id: string,
+  active: boolean,
+}

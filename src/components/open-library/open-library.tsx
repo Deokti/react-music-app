@@ -4,7 +4,7 @@ import { LibraryIcon } from '../icon';
 
 import './open-library.scss';
 import '../../assets/style/theme.scss';
-import { themeColor } from '../../theme';
+import { iconTheme, themeColor } from '../../theme';
 
 type TFCOpenLibrary = {
   open?: boolean
@@ -15,7 +15,7 @@ const OpenLibrary: React.FC<TFCOpenLibrary> = ({ darkMode, open }: TFCOpenLibrar
 
   return (
     <div className="open-library">
-      <LibraryIcon color={darkMode ? '#fff' : '#000'} />
+      <LibraryIcon color={iconTheme(darkMode)} />
       <span className={`open-library__text ${themeColor(darkMode)}`}>Открыть библиотеку</span>
     </div>
   )

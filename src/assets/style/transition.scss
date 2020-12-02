@@ -1,6 +1,7 @@
 .auth-input__focus,
 .button,
 .toggle-switch,
-.toggle-switch__circle {
+.toggle-switch__circle,
+.player-button-arrow::after {
   transition: all .25s cubic-bezier(.02,.01,.47,1);
 }
