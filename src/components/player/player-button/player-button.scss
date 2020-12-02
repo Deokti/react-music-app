@@ -1,0 +1,12 @@
+.player-button {
+  position: relative;
+  cursor: pointer;
+  border: none;
+  background-color: transparent;
+  &:focus {
+    outline: none;
+  }
+  &-left {
+    transform: rotateY(180deg);
+  }
+}

@@ -1,0 +1,29 @@
+.toggle-switch {
+  cursor: pointer;
+  position: relative;
+  width: 6rem;
+  height: 3.2rem;
+  border-radius: 5rem;
+  background-color: #9F9DA3;
+  &__circle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    width: 2.6rem;
+    height: 2.6rem;
+    background-color: #fff;
+    border-radius: 50%;
+    left: .4rem;
+    top: .3rem;
+    img {
+      pointer-events: none;
+    }
+  }
+  &-active {
+    background-color: #9641FF;
+    .toggle-switch__circle {
+      transform: translateX(100%);
+    }
+  }
+}

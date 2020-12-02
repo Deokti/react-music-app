@@ -18,5 +18,9 @@ const auth = initializeFirebase.auth();
 const database = initializeFirebase.database();
 const storage = initializeFirebase.storage();
 
+export const databaseRef = {
+  USERS: 'USERS'
+}
+
 export default initializeFirebase;
 export { auth, database, storage };

@@ -1,17 +1,33 @@
-import React from 'react';
-import { TDatabaseSaveUser } from '../../types';
+import React, { useState } from 'react';
+import Header from '../header';
+import Song from '../song';
+import Player from '../player';
+
+
+import { TLogInUser, TSong } from '../../types';
+import { themeBackground } from '../../theme';
+import { songsData } from '../utils/songData';
 
 import './app.scss';
 
-type TFCApp = {
-  logInUser: TDatabaseSaveUser | null | undefined
-}
-
-const App: React.FC<TFCApp> = ({ logInUser }: TFCApp) => {
+const App: React.FC<TLogInUser> = ({ logInUser }: TLogInUser) => {
+  const [songs, setSongs] = useState<Array<TSong>>(songsData());
+  const [currentSong, setCurrentSong] = useState<TSong>(songs[3]);
+  const [onSongPlay, setOnSongPlay] = useState<boolean>(false);
 
   return (
-    <section className="app">
-      <h1 style={{ fontSize: '10rem', textAlign: 'center' }}>Главная страница</h1>
+    <section className={`app ${themeBackground(logInUser?.darkTheme)}`}>
+      <Header logInUser={logInUser} />
+
+      <div className="app-content">
+        <Song currentSong={currentSong} darkTheme={logInUser?.darkTheme} />
+        <Player
+          currentAudioSong={currentSong.audio}
+          onSongPlay={onSongPlay}
+          setOnSongPlay={setOnSongPlay}
+          darkTheme={logInUser?.darkTheme}
+        />
+      </div>
     </section>
   )
 };

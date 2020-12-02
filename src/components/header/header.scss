@@ -1,0 +1,15 @@
+.header {
+  min-height: 7rem;
+  padding: 0 4rem;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  &__user {
+    position: relative;
+    margin-right: 5rem;
+  }
+  &__right {
+    display: flex;
+  }
+}

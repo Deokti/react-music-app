@@ -4,8 +4,6 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 import MainRoot from './main-root';
 
-import reportWebVitals from './reportWebVitals';
-
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
@@ -14,6 +12,3 @@ ReactDOM.render(
   </React.StrictMode>,
   document.getElementById('root')
 );
-
-
-reportWebVitals();

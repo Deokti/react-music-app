@@ -1,0 +1,52 @@
+@import './variables.scss';
+
+.bg-light {
+  background-color: #fff;
+}
+.header-light {
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.25);
+  background-color: #fff;
+}
+.c-light {
+  color: #000;
+}
+.hover-light,
+.hover-dark {
+  position: relative;
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 0;
+    height: 100%;
+    
+  }
+  &:hover::before {
+    width: 100%;
+  }
+}
+.hover-light::before {
+  background-color: rgba(35, 118, 202, 0.2);
+}
+.hover-dark::before {
+  background-color: rgba(255, 68, 96, 0.2);
+}
+
+.bg-dark {
+  background-color: #16191C;
+}
+.header-dark {
+  background-color: $darkHeader;
+  color: #fff;
+}
+.d-dark {
+  color: $darkDescription;
+}
+.c-dark {
+  color: #fff;
+}
+
+
+
+

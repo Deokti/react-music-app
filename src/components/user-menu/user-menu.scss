@@ -1,0 +1,23 @@
+.user-modal {
+  position: absolute;
+  bottom: -1.5rem;
+  transform: translateY(100%);
+  right: 0;
+  min-width: 23rem;
+  min-height: 7.5rem;
+  border-radius: 0px 0px 5px 5px;
+  list-style: none;
+  &__item {
+    cursor: pointer;
+    position: relative;
+    padding: 1.2rem 1rem;
+    &:last-child::before {
+      border-radius: 0 0 5px 5px;
+    }
+  }
+  &__text {
+    padding-left: 1rem;
+    font-weight: 300;
+    font-size: 1.5rem;
+  }
+}
