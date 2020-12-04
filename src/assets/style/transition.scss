@@ -1,7 +1,21 @@
+// Для всех
 .auth-input__focus,
 .button,
 .toggle-switch,
 .toggle-switch__circle,
 .player-button-arrow::after {
-  transition: all .25s cubic-bezier(.02,.01,.47,1);
+  transition: all .25s cubic-bezier(.02, .01, .47, 1);
+}
+
+// Плавность изминения темы
+.header,
+.open-library span,
+.open-library svg path,
+.app,
+.player-button svg path,
+.user__description span,
+.user__description svg path {
+  transition: color .25s cubic-bezier(.02, .01, .47, 1),
+    background-color .25s cubic-bezier(.02, .01, .47, 1),
+    fill .25s cubic-bezier(.02, .01, .47, 1),
 }

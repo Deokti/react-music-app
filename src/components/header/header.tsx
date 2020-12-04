@@ -23,9 +23,7 @@ const Header: React.FC<TFCHeader> = ({ logInUser }: TFCHeader) => {
 
       database.ref(databaseRef.USERS)
         .child(id)
-        .update({
-          darkTheme: !darkTheme
-        })
+        .update({ darkTheme: !darkTheme })
     }
   }
 

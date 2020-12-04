@@ -3,7 +3,7 @@ import React, { memo } from 'react';
 import './auth-input.scss';
 
 type TFCInput = {
-  type?: string
+  type?: 'text' | 'email' | 'password'
   name: string
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void
   inputTitle: string
