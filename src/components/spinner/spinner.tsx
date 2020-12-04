@@ -1,14 +1,13 @@
 import React from 'react';
-import { SpinnerLoader } from '../icon';
+import BounceLoader from 'react-spinners/BounceLoader';
 
 import './spinner.scss';
 
-const Spinner = () => {
+const Spinner: React.FC = () => {
 
   return (
     <div className="spinner">
-      <SpinnerLoader size='20%' color='#000' />
-      <span className="spinner-text">Идёт загрузка...</span>
+      <BounceLoader size="300" color="#1E2126" />
     </div>
   );
 };

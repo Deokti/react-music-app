@@ -12,7 +12,7 @@ import './app.scss';
 
 const App: React.FC<TLogInUser> = ({ logInUser }: TLogInUser) => {
   const [songs, setSongs] = useState<Array<TSong>>(songsData());
-  const [currentSong, setCurrentSong] = useState<TSong>(songs[3]);
+  const [currentSong, setCurrentSong] = useState<TSong>(songs[0]);
   const [onSongPlay, setOnSongPlay] = useState<boolean>(false);
 
   return (

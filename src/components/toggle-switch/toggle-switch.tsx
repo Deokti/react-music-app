@@ -21,4 +21,5 @@ const ToggleSwitch: React.FC<TFCToggleSwitch> = ({ checked, toggleTheme }: TFCTo
   );
 };
 
+
 export default ToggleSwitch;
