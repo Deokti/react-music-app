@@ -6,7 +6,7 @@ import './user-menu.scss';
 import { themeDescriptionColor, themeHeader, themeHover } from '../../theme';
 import '../../assets/style/theme.scss';
 
-type TFCUserMenu = {
+interface TFCUserMenu {
   setShowMenu: (state: boolean) => void
   darkTheme: boolean | undefined
 }

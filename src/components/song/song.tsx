@@ -1,16 +1,15 @@
 import { url } from 'inspector';
 import React from 'react';
 import { themeColor } from '../../theme';
-import { TSong } from '../../types';
+import { TDarkTheme, TSong } from '../../types';
 
 import './song.scss';
 
 type TFCSong = {
   currentSong: TSong
-  darkTheme: boolean | undefined
 }
 
-const Song: React.FC<TFCSong> = ({ currentSong, darkTheme }: TFCSong) => {
+const Song: React.FC<TFCSong & TDarkTheme> = ({ currentSong, darkTheme }: TFCSong & TDarkTheme) => {
   const { name, cover, artist } = currentSong;
 
   return (

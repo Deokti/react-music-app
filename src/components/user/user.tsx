@@ -6,7 +6,7 @@ import './user.scss';
 import '../../assets/style/theme.scss';
 import { themeDescriptionColor } from '../../theme';
 
-type TFCUser = {
+interface TFCUser {
   showMenu: boolean
   setShowMenu: (state: boolean) => void
 }

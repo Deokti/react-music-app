@@ -77,7 +77,7 @@ const Player: React.FC<TFCPlayer> = ({ currentAudioSong, onSongPlay, setOnSongPl
           max={songInfo.durationAudio}
           onChange={dragHandler} />
         <span className={`player-time__item player-duration ${colorText}`}>
-          {getAudioTime(songInfo.durationAudio)}
+          {0 || getAudioTime(songInfo.durationAudio)}
         </span>
       </div>
 

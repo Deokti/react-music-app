@@ -1,15 +1,19 @@
-export type TRegisterUser = {
+export interface TRegisterUser {
   login: string
   email: string
   password: string
 }
 
-export type TLoginUser = {
+export type TDarkTheme = {
+  darkTheme: boolean | undefined
+}
+
+export interface TLoginUser {
   email: string
   password: string
 }
 
-export type TDatabaseSaveUser = {
+export interface TDatabaseSaveUser {
   avatar: string
   darkTheme: boolean
   email: string
@@ -18,11 +22,11 @@ export type TDatabaseSaveUser = {
   username: string
 }
 
-export type TLogInUser = {
+export interface TLogInUser {
   logInUser: TDatabaseSaveUser | null | undefined
 }
 
-export type TSong = {
+export interface TSong {
   name: string,
   cover: string
   artist: string,

@@ -1,0 +1,33 @@
+.library-item {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 1.2rem 3rem;
+
+  &__cover {
+    width: 5.3rem;
+    height: 5.3rem;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    z-index: 2;
+  }
+
+  &__description {
+    z-index: 2;
+    padding-left: 1.5rem;
+  }
+
+  &__name {
+    display: block;
+    font-size: 2rem;
+  }
+
+  &__artist {
+
+    padding-top: 0.2rem;
+    display: block;
+    font-size: 1.4rem;
+    color: #9F9DA3;
+  }
+}

@@ -14,7 +14,12 @@
 .app,
 .player-button svg path,
 .user__description span,
-.user__description svg path {
+.user__description svg path,
+.library,
+.library-top,
+.library__title,
+.library-item__name,
+.new-sound {
   transition: color .25s cubic-bezier(.02, .01, .47, 1),
     background-color .25s cubic-bezier(.02, .01, .47, 1),
     fill .25s cubic-bezier(.02, .01, .47, 1),
