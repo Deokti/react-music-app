@@ -5,7 +5,7 @@ import darkTheme from '../../assets/icon/dark-theme.svg';
 
 import './toggle-switch.scss';
 
-type TFCToggleSwitch = {
+interface TFCToggleSwitch {
   checked?: boolean
   toggleTheme: () => void
 }

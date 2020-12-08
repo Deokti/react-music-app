@@ -9,11 +9,11 @@ import { auth, database } from './config/firebase';
 import { routePath } from './config/router-path';
 import { TDatabaseSaveUser } from './types';
 
-type TFCMainRoot = {
+interface TFCMainRoot {
   history: any
 }
 
-type TLoggedUser = {
+interface TLoggedUser {
   isLoaded: boolean
   logInUser: TDatabaseSaveUser | null
 }

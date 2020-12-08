@@ -1,0 +1,18 @@
+.new-sound {
+  cursor: pointer;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  min-height: 5rem;
+  border: none;
+
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #fff;
+  z-index: 30;
+
+  &:focus {
+    outline: none;
+  }
+}
