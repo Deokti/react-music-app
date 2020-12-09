@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { routePath } from '../../../config/router-path';
 import Button from '../../button';
-import AuthInput from '../auth-input';
+import Input from '../../input';
 
 import md5 from 'md5';
 
@@ -92,21 +92,21 @@ const Register: React.FC = () => {
 
         <form className="auth-form" onSubmit={onSumbmitHandler}>
 
-          <AuthInput
+          <Input
             name="login"
             type="text"
             inputTitle="Логин"
             value={registerUser.login}
             onChange={inputChangeHandler}
           />
-          <AuthInput
+          <Input
             name="email"
             type="email"
             inputTitle="Email"
             value={registerUser.email}
             onChange={inputChangeHandler}
           />
-          <AuthInput
+          <Input
             name="password"
             type="password"
             inputTitle="Пароль"
@@ -114,9 +114,15 @@ const Register: React.FC = () => {
             onChange={inputChangeHandler}
           />
 
-          <Button loading={loading}>Регистрация</Button>
-          <AuthRedirect path={routePath.login} />
+          <Button
+            loading={loading}
+            pseudoClassActive={true}
+            pseudoClassFocus={true}
+          >
+            Регистрация
+            </Button>
 
+          <AuthRedirect path={routePath.login} />
           {error && <span className="auth-error">{error}</span>}
         </form>
       </div>

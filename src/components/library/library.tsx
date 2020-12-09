@@ -1,11 +1,10 @@
 import React from 'react';
-import { themeBackground, themeColor, themeDescriptionColor, themeHeader } from '../../theme';
+import { themeBackground, themeColor, themeHeader } from '../../theme';
 import { TDarkTheme, TSong } from '../../types';
 import Button from '../button';
 import LibraryItem from './library-item';
 
 import './library.scss';
-import NewSound from './new-sound';
 
 interface ILibrary {
   songs: Array<TSong>
@@ -21,7 +20,7 @@ const Library: React.FC<TDarkTheme & ILibrary> = ({ darkTheme, songs, changeCurr
     <ul className="library__list">
       {
         songs.map((song) => (
-          <li className="library__item"
+          <li className="library__item" key={song.id}
             onClick={() => changeCurrentSong(song.id)}
           >
             <LibraryItem darkTheme={darkTheme} song={song} />
@@ -30,7 +29,14 @@ const Library: React.FC<TDarkTheme & ILibrary> = ({ darkTheme, songs, changeCurr
       }
     </ul>
 
-    <NewSound darkTheme={darkTheme} />
+    <Button
+      className="library__button"
+      borderRadius={0}
+      height="5rem"
+      backgroundColor={darkTheme ? '#FF4460' : '#2376CA'}
+    >
+      Добавить новую мелодию
+    </Button>
   </div>
 );
 

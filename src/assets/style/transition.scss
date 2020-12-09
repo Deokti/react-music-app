@@ -1,6 +1,5 @@
 // Для всех
 .auth-input__focus,
-.button,
 .toggle-switch,
 .toggle-switch__circle,
 .player-button-arrow::after {
@@ -19,7 +18,7 @@
 .library-top,
 .library__title,
 .library-item__name,
-.new-sound {
+.library__button {
   transition: color .25s cubic-bezier(.02, .01, .47, 1),
     background-color .25s cubic-bezier(.02, .01, .47, 1),
     fill .25s cubic-bezier(.02, .01, .47, 1),
