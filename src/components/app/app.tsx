@@ -10,6 +10,7 @@ import { themeBackground } from '../../theme';
 import { songsData } from '../utils/songData';
 
 import './app.scss';
+import NewAudio from '../new-audio';
 
 const App: React.FC<TLogInUser> = ({ logInUser }: TLogInUser) => {
   const [songs, setSongs] = useState<Array<TSong>>(songsData());
@@ -42,7 +43,10 @@ const App: React.FC<TLogInUser> = ({ logInUser }: TLogInUser) => {
         <Library
           darkTheme={logInUser?.darkTheme}
           songs={songs}
-          changeCurrentSong={changeCurrentSong} />
+          changeCurrentSong={changeCurrentSong}
+        />
+
+        <NewAudio />
       </div>
     </section>
   )

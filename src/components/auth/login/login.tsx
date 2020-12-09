@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import AuthInput from '../auth-input';
+import Input from '../../input';
 import Button from '../../button';
 import AuthRedirect from '../auth-redirect';
 
@@ -63,13 +63,13 @@ const Login: React.FC = () => {
         </header>
 
         <form className="auth-form" onSubmit={onSubmitHandler}>
-          <AuthInput
+          <Input
             value={loginUser.email}
             name="email" type="email"
             inputTitle="Email"
             onChange={inputChangeHandler}
           />
-          <AuthInput
+          <Input
             value={loginUser.password}
             name="password"
             type="password"
@@ -77,9 +77,15 @@ const Login: React.FC = () => {
             onChange={inputChangeHandler}
           />
 
-          <Button loading={loading}>Войти</Button>
-          <AuthRedirect path={routePath.register} />
+          <Button
+            loading={loading}
+            pseudoClassActive={true}
+            pseudoClassFocus={true}
+          >
+            Войти
+          </Button>
 
+          <AuthRedirect path={routePath.register} />
           {error && <span className="auth-error">{error}</span>}
         </form>
       </div>
