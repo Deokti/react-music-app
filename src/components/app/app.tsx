@@ -16,6 +16,10 @@ const App: React.FC<TLogInUser> = ({ logInUser }: TLogInUser) => {
   const [songs, setSongs] = useState<Array<TSong>>(songsData());
   const [currentSong, setCurrentSong] = useState<TSong>(songs[0]);
   const [onSongPlay, setOnSongPlay] = useState<boolean>(false);
+  const [libraryState, setLibraryState] = useState<boolean>(false);
+
+  const openLibrary = () => setLibraryState(true);
+  const closeLibrary = () => setLibraryState(false);
 
   const changeCurrentSong = (id: string) => {
     const selected = songs.find((item) => item.id === id);
@@ -44,9 +48,10 @@ const App: React.FC<TLogInUser> = ({ logInUser }: TLogInUser) => {
           darkTheme={logInUser?.darkTheme}
           songs={songs}
           changeCurrentSong={changeCurrentSong}
+          openLibrary={openLibrary}
         />
 
-        <NewAudio />
+        {libraryState && <NewAudio closeLibrary={closeLibrary} darkTheme={logInUser?.darkTheme} />}
       </div>
     </section>
   )

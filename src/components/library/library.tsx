@@ -9,9 +9,10 @@ import './library.scss';
 interface ILibrary {
   songs: Array<TSong>
   changeCurrentSong: (id: string) => void
+  openLibrary: () => void
 }
 
-const Library: React.FC<TDarkTheme & ILibrary> = ({ darkTheme, songs, changeCurrentSong }: TDarkTheme & ILibrary) => (
+const Library: React.FC<TDarkTheme & ILibrary> = ({ darkTheme, songs, changeCurrentSong, openLibrary }: TDarkTheme & ILibrary) => (
   <div className={`library ${themeHeader(darkTheme)}`}>
     <div className="library-top">
       <h3 className={`library__title ${themeBackground(darkTheme)} ${themeColor(darkTheme)}`}>Библиотека</h3>
@@ -31,6 +32,7 @@ const Library: React.FC<TDarkTheme & ILibrary> = ({ darkTheme, songs, changeCurr
 
     <Button
       className="library__button"
+      onClick={openLibrary}
       borderRadius={0}
       height="5rem"
       backgroundColor={darkTheme ? '#FF4460' : '#2376CA'}

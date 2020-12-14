@@ -7,7 +7,7 @@ type TFCButton = {
   loading?: boolean
   children: string
   className?: string
-  onClick?: () => any
+  onClick?: (state?: any) => any
   backgroundColor?: string
   borderRadius?: number
   width?: number | string
