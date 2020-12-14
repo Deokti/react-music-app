@@ -1,5 +1,4 @@
 import React, { useRef, useState } from 'react';
-import { iconTheme, themeBackground } from '../../theme';
 import Button from '../button';
 import { PauseIcon, PlayIcon } from '../icon';
 import Input from '../input';
@@ -56,35 +55,33 @@ const NewAudio: React.FC<TFCNewAudit> = ({ closeLibrary, darkTheme }: TFCNewAudi
   }
 
 
-  const colorIcon = iconTheme(darkTheme);
-  const previewColor = darkTheme ? '#407fab' : '#225171';
   return (
     <div className="new-audio">
-      <form className={`new-audio__body ${themeBackground(darkTheme)}`}>
+      <form className="new-audio__body">
+        <div className="new-audio__info">
+          <Input
+            type="text"
+            inputTitle="Название"
+            onChange={inputHandler}
+            name="name"
+            color="#407fab"
+            value={links.name}
+          />
+          <Input
+            type="text"
+            inputTitle="Автор"
+            onChange={inputHandler}
+            name="author"
+            color="#407fab"
+            value={links.author}
+          />
+        </div>
         <div className="new-audio__inner">
           <div className="new-audio__left">
-            <Input
-              type="text"
-              inputTitle="Название"
-              onChange={inputHandler}
-              name="name"
-              color="#407fab"
-              border="1px solid #1E2126"
-              value={links.name}
-            />
-            <Input
-              type="text"
-              inputTitle="Автор"
-              onChange={inputHandler}
-              border="1px solid #1E2126"
-              name="author"
-              color="#407fab"
-              value={links.author}
-            />
+
             <Input
               type="text"
               inputTitle="Ссылка на картинку"
-              border="1px solid #1E2126"
               onChange={inputHandler}
               name="imageLink"
               color="#407fab"
@@ -93,7 +90,6 @@ const NewAudio: React.FC<TFCNewAudit> = ({ closeLibrary, darkTheme }: TFCNewAudi
             <Input
               type="text"
               inputTitle="Ссылка на аудио (MP3)"
-              border="1px solid #1E2126"
               onChange={inputHandler}
               name="audioLink"
               color="#407fab"
@@ -102,7 +98,7 @@ const NewAudio: React.FC<TFCNewAudit> = ({ closeLibrary, darkTheme }: TFCNewAudi
           </div>
 
           <div className="new-audio__preview">
-            <h4 className="new-audio__preview-title" style={{ color: previewColor }}>Превью</h4>
+            <h4 className="new-audio__preview-title">Превью</h4>
 
             {/* Картика */}
             {
@@ -112,15 +108,16 @@ const NewAudio: React.FC<TFCNewAudit> = ({ closeLibrary, darkTheme }: TFCNewAudi
             }
 
             {/* Аудио */}
-
-            {links.audioLink && (
-              <div className="new-audio__audio">
-                <input type="range" className="new-audio__range" />
-                <div className="new-audio__state" onClick={playSongHanlder}>
-                  {onPlay ? <PauseIcon size={13} color={colorIcon} /> : <PlayIcon size={13} color={colorIcon} />}
+            {
+              links.audioLink && (
+                <div className="new-audio__audio">
+                  <input type="range" className="new-audio__range" />
+                  <div className="new-audio__state" onClick={playSongHanlder}>
+                    {onPlay ? <PauseIcon size={13} /> : <PlayIcon size={13} />}
+                  </div>
                 </div>
-              </div>
-            )}
+              )
+            }
             <audio ref={audioRef} src={links.audioLink} />
           </div>
         </div>

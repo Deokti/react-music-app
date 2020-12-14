@@ -1,5 +1,4 @@
 import React from 'react';
-import { themeBackground, themeColor, themeHeader } from '../../theme';
 import { TDarkTheme, TSong } from '../../types';
 import Button from '../button';
 import LibraryItem from './library-item';
@@ -13,9 +12,9 @@ interface ILibrary {
 }
 
 const Library: React.FC<TDarkTheme & ILibrary> = ({ darkTheme, songs, changeCurrentSong, openLibrary }: TDarkTheme & ILibrary) => (
-  <div className={`library ${themeHeader(darkTheme)}`}>
+  <div className="library">
     <div className="library-top">
-      <h3 className={`library__title ${themeBackground(darkTheme)} ${themeColor(darkTheme)}`}>Библиотека</h3>
+      <h3 className="library__title">Библиотека</h3>
     </div>
 
     <ul className="library__list">
@@ -24,7 +23,7 @@ const Library: React.FC<TDarkTheme & ILibrary> = ({ darkTheme, songs, changeCurr
           <li className="library__item" key={song.id}
             onClick={() => changeCurrentSong(song.id)}
           >
-            <LibraryItem darkTheme={darkTheme} song={song} />
+            <LibraryItem song={song} />
           </li>
         ))
       }
@@ -35,7 +34,6 @@ const Library: React.FC<TDarkTheme & ILibrary> = ({ darkTheme, songs, changeCurr
       onClick={openLibrary}
       borderRadius={0}
       height="5rem"
-      backgroundColor={darkTheme ? '#FF4460' : '#2376CA'}
     >
       Добавить новую мелодию
     </Button>

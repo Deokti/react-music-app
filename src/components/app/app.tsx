@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Header from '../header';
 import Song from '../song';
 import Player from '../player';
@@ -6,7 +6,6 @@ import Library from '../library';
 
 
 import { TLogInUser, TSong } from '../../types';
-import { themeBackground } from '../../theme';
 import { songsData } from '../utils/songData';
 
 import './app.scss';
@@ -32,17 +31,28 @@ const App: React.FC<TLogInUser> = ({ logInUser }: TLogInUser) => {
     };
   }
 
+  const changeTheme = (currentTheme: string): void => {
+    document.documentElement.setAttribute('data-theme', currentTheme);
+  };
+
+  useEffect(() => {
+    const darkTheme = logInUser?.darkTheme
+
+    if (darkTheme) changeTheme('dark');
+    else changeTheme('light');
+
+  }, [logInUser?.darkTheme])
+
   return (
-    <section className={`app ${themeBackground(logInUser?.darkTheme)}`}>
+    <section className="app">
       <Header logInUser={logInUser} />
 
       <div className="app-content">
-        <Song currentSong={currentSong} darkTheme={logInUser?.darkTheme} />
+        <Song currentSong={currentSong} />
         <Player
           currentAudioSong={currentSong.audio}
           onSongPlay={onSongPlay}
           setOnSongPlay={setOnSongPlay}
-          darkTheme={logInUser?.darkTheme}
         />
         <Library
           darkTheme={logInUser?.darkTheme}

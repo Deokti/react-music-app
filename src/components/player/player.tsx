@@ -5,13 +5,11 @@ import './player.scss';
 import PlayerButton from './player-button';
 import { ArrowIcon, PlayIcon, PauseIcon } from '../icon';
 import { getAudioTime } from '../utils/getAudioTime';
-import { iconTheme, themeColor } from '../../theme';
 
 type TFCPlayer = {
   currentAudioSong: string
   onSongPlay: boolean
   setOnSongPlay: (state: boolean) => void
-  darkTheme: boolean | undefined
 }
 
 type TSongInfo = {
@@ -19,7 +17,7 @@ type TSongInfo = {
   durationAudio: number
 }
 
-const Player: React.FC<TFCPlayer> = ({ currentAudioSong, onSongPlay, setOnSongPlay, darkTheme }: TFCPlayer) => {
+const Player: React.FC<TFCPlayer> = ({ currentAudioSong, onSongPlay, setOnSongPlay }: TFCPlayer) => {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [songInfo, setSongInfo] = useState<TSongInfo>({
     currentTimeSong: 0,
@@ -59,14 +57,11 @@ const Player: React.FC<TFCPlayer> = ({ currentAudioSong, onSongPlay, setOnSongPl
     })
   }
 
-  const colorText = themeColor(darkTheme);
-  const colorIcon = iconTheme(darkTheme);
-
   return (
     <div className="player">
       <div className="player-time">
         <span
-          className={`player-time__item player-current-time ${colorText}`}>
+          className="player-time__item player-current-time">
           {getAudioTime(songInfo.currentTimeSong)}
         </span>
         <input
@@ -76,15 +71,15 @@ const Player: React.FC<TFCPlayer> = ({ currentAudioSong, onSongPlay, setOnSongPl
           value={songInfo.currentTimeSong}
           max={songInfo.durationAudio}
           onChange={dragHandler} />
-        <span className={`player-time__item player-duration ${colorText}`}>
+        <span className="player-time__item player-duration">
           {0 || getAudioTime(songInfo.durationAudio)}
         </span>
       </div>
 
       <div className="player-control">
-        <PlayerButton Icon={ArrowIcon} left color={colorIcon} />
-        <PlayerButton Icon={onSongPlay ? PauseIcon : PlayIcon} onClick={playSongHanlder} color={colorIcon} />
-        <PlayerButton Icon={ArrowIcon} color={colorIcon} />
+        <PlayerButton Icon={ArrowIcon} left />
+        <PlayerButton Icon={onSongPlay ? PauseIcon : PlayIcon} onClick={playSongHanlder} />
+        <PlayerButton Icon={ArrowIcon} />
       </div>
 
       <audio

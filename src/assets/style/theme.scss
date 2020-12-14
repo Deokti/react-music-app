@@ -1,52 +1,27 @@
-@import './variables.scss';
-
-.bg-light {
-  background-color: #fff;
-}
-.header-light {
-  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.25);
-  background-color: #fff;
-}
-.c-light {
-  color: #000;
-}
-.hover-light,
-.hover-dark {
-  position: relative;
-  &::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 0;
-    height: 100%;
-    
-  }
-  &:hover::before {
-    width: 100%;
-  }
-}
-.hover-light::before {
-  background-color: rgba(35, 118, 202, 0.2);
-}
-.hover-dark::before {
-  background-color: rgba(255, 68, 96, 0.2);
+[data-theme="light"] {
+  --main-background: #fff;
+  --additional-background: #fff;
+  --color: #fff;
+  --color-hover: rgba(35, 118, 202, 0.2);
+  --shadow: 0px 2px 10px rgba(0, 0, 0, 0.25);
+  --text-color: #000;
+  --description-color: #000;
+  --large-shadow: 3px 0px 30px rgba(0, 0, 0, 0.25);
+  --button: #2376CA;
+  --button-rgb: 35, 118, 202;
+  --input-border-color: #EDEDED;
 }
 
-.bg-dark {
-  background-color: #16191C;
+[data-theme="dark"] {
+  --main-background: #16191C;
+  --additional-background: #1E2126;
+  --color: #fff;
+  --color-hover: rgba(255, 68, 96, 0.2);
+  --shadow: none;
+  --text-color: #fff;
+  --description-color: #9F9DA3;
+  --large-shadow: none;
+  --button: #FF4460;
+  --button-rgb: 255, 68, 96;
+  --input-border-color: #1E2126;
 }
-.header-dark {
-  background-color: $darkHeader;
-  color: #fff;
-}
-.d-dark {
-  color: $darkDescription;
-}
-.c-dark {
-  color: #fff;
-}
-
-
-
-

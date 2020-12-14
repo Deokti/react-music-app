@@ -1,6 +1,5 @@
 import React from 'react';
-import { themeColor, themeHover } from '../../../theme';
-import { TDarkTheme, TSong } from '../../../types';
+import { TSong } from '../../../types';
 
 import './library-item.scss';
 
@@ -8,14 +7,14 @@ interface ILibraryItem {
   song: TSong
 }
 
-const LibraryItem: React.FC<TDarkTheme & ILibraryItem> = ({ darkTheme, song }: TDarkTheme & ILibraryItem) => {
+const LibraryItem: React.FC<ILibraryItem> = ({ song }: ILibraryItem) => {
 
   return (
-    <div className={`library-item ${themeHover(darkTheme)}`}>
+    <div className="library-item">
       <div className="library-item__cover" style={{ backgroundImage: "url(" + song.cover + ")" }} />
 
       <div className="library-item__description">
-        <h2 className={`library-item__name ${themeColor(darkTheme)}`}> {song.name} </h2>
+        <h2 className="library-item__name"> {song.name} </h2>
         <span className="library-item__artist"> {song.artist} </span>
       </div>
 

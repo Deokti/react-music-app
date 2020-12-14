@@ -7,7 +7,6 @@ import './header.scss';
 import UserMenu from '../user-menu';
 import ToggleSwitch from '../toggle-switch';
 import { database, databaseRef } from '../../config/firebase';
-import { themeHeader } from '../../theme';
 
 type TFCHeader = {
   logInUser: TDatabaseSaveUser | null | undefined
@@ -28,13 +27,13 @@ const Header: React.FC<TFCHeader> = ({ logInUser }: TFCHeader) => {
   }
 
   return (
-    <header className={`header ${themeHeader(logInUser?.darkTheme)}`}>
-      <OpenLibrary darkMode={logInUser?.darkTheme} />
+    <header className="header">
+      <OpenLibrary />
 
       <div className="header__right">
         <div className="header__user">
           <User logInUser={logInUser} showMenu={showMenu} setShowMenu={setShowMenu} />
-          {showMenu && <UserMenu darkTheme={logInUser?.darkTheme} setShowMenu={setShowMenu} />}
+          {showMenu && <UserMenu setShowMenu={setShowMenu} />}
         </div>
 
         <ToggleSwitch checked={logInUser?.darkTheme} toggleTheme={toggleTheme} />
