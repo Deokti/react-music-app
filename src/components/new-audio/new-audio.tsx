@@ -1,29 +1,32 @@
-import React, { useRef, useState } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
+import { database, databaseRef } from '../../config/firebase';
+import { TSongDatabase } from '../../types';
 import Button from '../button';
 import { PauseIcon, PlayIcon } from '../icon';
 import Input from '../input';
+import { v4 as uuidv4 } from "uuid";
 
 
 import './new-audio.scss';
 
-type TLinks = {
-  imageLink: string
-  audioLink: string
+
+interface TFCNewAudit {
+  closeNewAudio: () => void
 }
 
-const NewAudio: React.FC = () => {
+type TLinks = {
+  poster: string
+  audio: string
+  name: string
+  author: string
+}
+
+const NewAudio: React.FC<TFCNewAudit> = ({ closeNewAudio }: TFCNewAudit) => {
+  const linksBase = useMemo(() => ({ name: '', author: '', poster: '', audio: '' }), []);
+
   const audioRef = useRef<HTMLAudioElement>(null);
   const [onPlay, setOnPlay] = useState<boolean>(false);
-  const [songInfo, setSongInfo] = useState(0);
-  const [links, setLinks] = useState<TLinks>({
-    imageLink: '',
-    audioLink: ''
-  });
-
-  const timeUpdateHandler = (event: React.SyntheticEvent<HTMLAudioElement>): void => {
-    const currentTimeSong = event.currentTarget.currentTime
-    setSongInfo(currentTimeSong);
-  };
+  const [links, setLinks] = useState<TLinks>(linksBase);
 
   const inputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.currentTarget;
@@ -33,7 +36,7 @@ const NewAudio: React.FC = () => {
   const playSongHanlder = () => {
     const { current } = audioRef;
 
-    // Если true - значти мелодия игрет и её нужно остановить
+    // Если true - значит мелодия игрет и её нужно остановить
     if (onPlay) {
       current?.pause();
       setOnPlay(!onPlay);
@@ -44,24 +47,85 @@ const NewAudio: React.FC = () => {
     setOnPlay(!onPlay);
   };
 
+  const close = (event: React.FormEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    closeNewAudio();
+  }
+
+  const onInputEmpty = ({ name, author, poster, audio }: TLinks) => {
+    return name.trim().length && author.trim().length &&
+      poster.trim().length && audio.trim().length;
+  }
+
+  const saveAudio = ({ name, author, poster, audio }: TLinks): TSongDatabase => {
+    return {
+      id: uuidv4(),
+      name,
+      author,
+      poster,
+      audio
+    };
+  };
+
+  const onDatabaseSave = () => {
+    const audioData = saveAudio(links);
+
+    return database.ref(databaseRef.MUSICS).child(audioData.id).set(audioData);
+  }
+
+
+  const onSubmit = (event: React.FormEvent<HTMLFormElement | HTMLButtonElement>) => {
+    event.preventDefault();
+
+    if (onInputEmpty(links)) {
+      onDatabaseSave();
+      setLinks(linksBase);
+      closeNewAudio();
+
+    } else {
+      console.error('Все поля должны быть заполнены!');
+    }
+  }
+
   return (
     <div className="new-audio">
-      <form className="new-audio__body">
+      <form className="new-audio__body" onSubmit={onSubmit}>
+        <div className="new-audio__info">
+          <Input
+            type="text"
+            inputTitle="Название"
+            onChange={inputHandler}
+            name="name"
+            color="#407fab"
+            value={links.name}
+          />
+          <Input
+            type="text"
+            inputTitle="Автор"
+            onChange={inputHandler}
+            name="author"
+            color="#407fab"
+            value={links.author}
+          />
+        </div>
         <div className="new-audio__inner">
           <div className="new-audio__left">
+
             <Input
               type="text"
               inputTitle="Ссылка на картинку"
               onChange={inputHandler}
-              name="imageLink"
-              value={links.imageLink}
+              name="poster"
+              color="#407fab"
+              value={links.poster}
             />
             <Input
               type="text"
               inputTitle="Ссылка на аудио (MP3)"
               onChange={inputHandler}
-              name="audioLink"
-              value={links.audioLink}
+              name="audio"
+              color="#407fab"
+              value={links.audio}
             />
           </div>
 
@@ -70,22 +134,23 @@ const NewAudio: React.FC = () => {
 
             {/* Картика */}
             {
-              links.imageLink && (
-                <div className="new-audio__image" style={{ backgroundImage: "url(" + links.imageLink + ")" }}></div>
+              links.poster && (
+                <div className="new-audio__image" style={{ backgroundImage: "url(" + links.poster + ")" }}></div>
               )
             }
 
             {/* Аудио */}
-
-            {links.audioLink && (
-              <div className="new-audio__audio">
-                <input type="range" className="new-audio__range" />
-                <div className="new-audio__state" onClick={playSongHanlder}>
-                  {onPlay ? <PauseIcon size={13} /> : <PlayIcon size={13} />}
+            {
+              links.audio && (
+                <div className="new-audio__audio">
+                  <input type="range" className="new-audio__range" />
+                  <div className="new-audio__state" onClick={playSongHanlder}>
+                    {onPlay ? <PauseIcon size={13} /> : <PlayIcon size={13} />}
+                  </div>
                 </div>
-              </div>
-            )}
-            <audio ref={audioRef} src={links.audioLink} />
+              )
+            }
+            <audio ref={audioRef} src={links.audio} />
           </div>
         </div>
 
@@ -96,6 +161,7 @@ const NewAudio: React.FC = () => {
             backgroundColor="#159FED"
             borderRadius={0}
             className="new-audio__button"
+            onClick={onSubmit}
           >
             Добавить
               </Button>
@@ -105,6 +171,7 @@ const NewAudio: React.FC = () => {
             backgroundColor="#FF4460"
             borderRadius={0}
             className="new-audio__button"
+            onClick={close}
           >
             Отмена
             </Button>

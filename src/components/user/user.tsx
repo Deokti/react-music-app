@@ -4,7 +4,6 @@ import { ArrowBottomIcon } from '../icon';
 
 import './user.scss';
 import '../../assets/style/theme.scss';
-import { themeDescriptionColor } from '../../theme';
 
 interface TFCUser {
   showMenu: boolean
@@ -21,8 +20,8 @@ const User: React.FC<TFCUser & TLogInUser> = ({ logInUser, showMenu, setShowMenu
         <h2 className="user__name">{logInUser?.username}</h2>
 
         <div className="user__description" onClick={toggleShowMenu}>
-          <span className={themeDescriptionColor(logInUser?.darkTheme)}>подробнее</span>
-          <ArrowBottomIcon color={logInUser?.darkTheme ? '#9F9DA3' : '#000'} />
+          <span>подробнее</span>
+          <ArrowBottomIcon />
         </div>
       </div>
 

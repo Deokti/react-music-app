@@ -7,7 +7,6 @@
     display: block;
     font-size: 1.5rem;
     font-weight: 400;
-    color: #225171;
     padding-bottom: .2rem;
   }
 
@@ -15,11 +14,10 @@
     padding: 0 .2rem;
     position: relative;
     width: 100%;
-    border: .1rem solid #EDEDED;
     border-radius: .5rem;
     height: 3.8rem;
-    color: #225171;
     font-size: 1.4rem;
+    background-color: transparent;
 
     &:focus {
       outline: none;

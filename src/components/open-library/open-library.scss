@@ -1,11 +1,18 @@
+@import '../../assets/style/theme.scss';
+
 .open-library {
   cursor: pointer;
   display: flex;
   align-items: center;
+
   &__text {
     display: block;
     padding-left: 1rem;
     font-size: 1.8rem;
-    color: #000;
+    color: var(--text-color);
+  }
+
+  svg path {
+    fill: var(--text-color);
   }
 }

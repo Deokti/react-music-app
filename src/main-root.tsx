@@ -4,10 +4,10 @@ import { Route, withRouter, Switch } from 'react-router-dom';
 import App from './components/app';
 import { Login, Register } from './components/auth';
 import Spinner from './components/spinner';
-import { auth, database } from './config/firebase';
+import { auth, database, databaseRef } from './config/firebase';
 
 import { routePath } from './config/router-path';
-import { TDatabaseSaveUser } from './types';
+import { TDatabaseSaveUser, TSong } from './types';
 
 interface TFCMainRoot {
   history: any
@@ -19,6 +19,7 @@ interface TLoggedUser {
 }
 
 const MainRoot: React.FC<TFCMainRoot> = ({ history }: TFCMainRoot) => {
+  const [songs, setSongs] = useState<Array<TSong>>([]);
   const [loggedUser, setLoggedUser] = useState<TLoggedUser>({
     isLoaded: true,
     logInUser: null
@@ -35,6 +36,12 @@ const MainRoot: React.FC<TFCMainRoot> = ({ history }: TFCMainRoot) => {
       });
   }, [])
 
+  const getDataSong = () => {
+    database.ref(databaseRef.MUSICS).on('child_added', snap => {
+      setSongs((prevState) => [...prevState, snap.val()]);
+    });
+  }
+
 
   const onAuthStateChanged = useCallback(() => {
     auth.onAuthStateChanged((currentUser: any) => {
@@ -42,6 +49,7 @@ const MainRoot: React.FC<TFCMainRoot> = ({ history }: TFCMainRoot) => {
         const uid = currentUser.uid;
         getDataUserDatabase(uid);
         history.push(routePath.main);
+        getDataSong();
       } else {
         setLoggedUser({
           isLoaded: false,
@@ -67,7 +75,13 @@ const MainRoot: React.FC<TFCMainRoot> = ({ history }: TFCMainRoot) => {
         loggedUser.isLoaded
           ? <Spinner />
           : (<Switch>
-            <Route path={routePath.main} exact render={() => (<App logInUser={loggedUser.logInUser} />)} />
+            <Route path={routePath.main} exact render={() => (
+              <App
+                logInUser={loggedUser.logInUser}
+                songs={songs}
+                firstSong={songs[0]}
+              />
+            )} />
             <Route path={routePath.login} component={Login} />
             <Route path={routePath.register} component={Register} />
           </Switch>)

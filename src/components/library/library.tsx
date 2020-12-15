@@ -1,29 +1,29 @@
 import React from 'react';
-import { themeBackground, themeColor, themeHeader } from '../../theme';
-import { TDarkTheme, TSong } from '../../types';
+import { TSong } from '../../types';
 import Button from '../button';
 import LibraryItem from './library-item';
 
 import './library.scss';
 
 interface ILibrary {
-  songs: Array<TSong>
+  songs: Array<TSong> | null
   changeCurrentSong: (id: string) => void
+  openNewAudio: () => void
 }
 
-const Library: React.FC<TDarkTheme & ILibrary> = ({ darkTheme, songs, changeCurrentSong }: TDarkTheme & ILibrary) => (
-  <div className={`library ${themeHeader(darkTheme)}`}>
+const Library: React.FC<ILibrary> = ({ songs, changeCurrentSong, openNewAudio }: ILibrary) => (
+  <div className="library">
     <div className="library-top">
-      <h3 className={`library__title ${themeBackground(darkTheme)} ${themeColor(darkTheme)}`}>Библиотека</h3>
+      <h3 className="library__title">Библиотека</h3>
     </div>
 
     <ul className="library__list">
       {
-        songs.map((song) => (
+        songs?.map((song) => (
           <li className="library__item" key={song.id}
             onClick={() => changeCurrentSong(song.id)}
           >
-            <LibraryItem darkTheme={darkTheme} song={song} />
+            <LibraryItem song={song} />
           </li>
         ))
       }
@@ -31,9 +31,9 @@ const Library: React.FC<TDarkTheme & ILibrary> = ({ darkTheme, songs, changeCurr
 
     <Button
       className="library__button"
+      onClick={openNewAudio}
       borderRadius={0}
       height="5rem"
-      backgroundColor={darkTheme ? '#FF4460' : '#2376CA'}
     >
       Добавить новую мелодию
     </Button>

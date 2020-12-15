@@ -1,12 +1,11 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { routePath } from '../../../config/router-path';
 import Button from '../../button';
 import Input from '../../input';
-
+import AuthRedirect from '../auth-redirect';
 import md5 from 'md5';
 
-import { auth, database } from '../../../config/firebase';
-import AuthRedirect from '../auth-redirect';
+import { auth, database, databaseRef } from '../../../config/firebase';
 import { TDatabaseSaveUser, TRegisterUser } from '../../../types';
 
 const Register: React.FC = () => {
@@ -51,7 +50,7 @@ const Register: React.FC = () => {
     const userId = createdUser.user.uid;
     const getSaveUser = saveUser(createdUser)
 
-    return database.ref('USERS').child(userId).set(getSaveUser);
+    return database.ref(databaseRef.USERS).child(userId).set(getSaveUser);
   }
 
   const onCreatedUser = async ({ login, email, password }: TRegisterUser) => {

@@ -19,7 +19,8 @@ const database = initializeFirebase.database();
 const storage = initializeFirebase.storage();
 
 export const databaseRef = {
-  USERS: 'USERS'
+  USERS: 'USERS',
+  MUSICS: 'MUSICS'
 }
 
 export default initializeFirebase;

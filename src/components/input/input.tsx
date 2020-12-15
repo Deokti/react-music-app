@@ -8,13 +8,21 @@ type TFCInput = {
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void
   inputTitle: string
   value: string
+  border?: string
+  color?: string
 }
 
-const Input: React.FC<TFCInput> = ({ type = 'text', name, onChange, inputTitle, value }: TFCInput) => {
+const Input: React.FC<TFCInput> = ({
+  type = 'text', name, onChange,
+  inputTitle, value,
+  border = '1px solid #EDEDED', color = '#225171'
+}: TFCInput) => {
+
   return (
-    <label className="input">
+    <label className="input" style={{ color }}>
       <span className="input__title">{inputTitle}</span>
       <input
+        style={{ border, color }}
         type={type}
         onChange={onChange}
         name={name}
