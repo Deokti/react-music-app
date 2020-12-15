@@ -1,34 +1,32 @@
-import React, { useRef, useState } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
+import { database, databaseRef } from '../../config/firebase';
+import { TSongDatabase } from '../../types';
 import Button from '../button';
 import { PauseIcon, PlayIcon } from '../icon';
 import Input from '../input';
+import { v4 as uuidv4 } from "uuid";
 
 
 import './new-audio.scss';
 
 
 interface TFCNewAudit {
-  closeLibrary: () => void
-  darkTheme: undefined | boolean
+  closeNewAudio: () => void
 }
 
 type TLinks = {
-  imageLink: string
-  audioLink: string
+  poster: string
+  audio: string
   name: string
   author: string
 }
 
-const NewAudio: React.FC<TFCNewAudit> = ({ closeLibrary, darkTheme }: TFCNewAudit) => {
+const NewAudio: React.FC<TFCNewAudit> = ({ closeNewAudio }: TFCNewAudit) => {
+  const linksBase = useMemo(() => ({ name: '', author: '', poster: '', audio: '' }), []);
+
   const audioRef = useRef<HTMLAudioElement>(null);
   const [onPlay, setOnPlay] = useState<boolean>(false);
-  const [songInfo, setSongInfo] = useState(0);
-  const [links, setLinks] = useState<TLinks>({
-    name: '',
-    author: '',
-    imageLink: '',
-    audioLink: ''
-  });
+  const [links, setLinks] = useState<TLinks>(linksBase);
 
   const inputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.currentTarget;
@@ -49,15 +47,49 @@ const NewAudio: React.FC<TFCNewAudit> = ({ closeLibrary, darkTheme }: TFCNewAudi
     setOnPlay(!onPlay);
   };
 
-  const close = (event: React.FormEvent) => {
+  const close = (event: React.FormEvent<HTMLButtonElement>) => {
     event.preventDefault();
-    closeLibrary();
+    closeNewAudio();
+  }
+
+  const onInputEmpty = ({ name, author, poster, audio }: TLinks) => {
+    return name.trim().length && author.trim().length &&
+      poster.trim().length && audio.trim().length;
+  }
+
+  const saveAudio = ({ name, author, poster, audio }: TLinks): TSongDatabase => {
+    return {
+      id: uuidv4(),
+      name,
+      author,
+      poster,
+      audio
+    };
+  };
+
+  const onDatabaseSave = () => {
+    const audioData = saveAudio(links);
+
+    return database.ref(databaseRef.MUSICS).child(audioData.id).set(audioData);
   }
 
 
+  const onSubmit = (event: React.FormEvent<HTMLFormElement | HTMLButtonElement>) => {
+    event.preventDefault();
+
+    if (onInputEmpty(links)) {
+      onDatabaseSave();
+      setLinks(linksBase);
+      closeNewAudio();
+
+    } else {
+      console.error('Все поля должны быть заполнены!');
+    }
+  }
+
   return (
     <div className="new-audio">
-      <form className="new-audio__body">
+      <form className="new-audio__body" onSubmit={onSubmit}>
         <div className="new-audio__info">
           <Input
             type="text"
@@ -83,17 +115,17 @@ const NewAudio: React.FC<TFCNewAudit> = ({ closeLibrary, darkTheme }: TFCNewAudi
               type="text"
               inputTitle="Ссылка на картинку"
               onChange={inputHandler}
-              name="imageLink"
+              name="poster"
               color="#407fab"
-              value={links.imageLink}
+              value={links.poster}
             />
             <Input
               type="text"
               inputTitle="Ссылка на аудио (MP3)"
               onChange={inputHandler}
-              name="audioLink"
+              name="audio"
               color="#407fab"
-              value={links.audioLink}
+              value={links.audio}
             />
           </div>
 
@@ -102,14 +134,14 @@ const NewAudio: React.FC<TFCNewAudit> = ({ closeLibrary, darkTheme }: TFCNewAudi
 
             {/* Картика */}
             {
-              links.imageLink && (
-                <div className="new-audio__image" style={{ backgroundImage: "url(" + links.imageLink + ")" }}></div>
+              links.poster && (
+                <div className="new-audio__image" style={{ backgroundImage: "url(" + links.poster + ")" }}></div>
               )
             }
 
             {/* Аудио */}
             {
-              links.audioLink && (
+              links.audio && (
                 <div className="new-audio__audio">
                   <input type="range" className="new-audio__range" />
                   <div className="new-audio__state" onClick={playSongHanlder}>
@@ -118,7 +150,7 @@ const NewAudio: React.FC<TFCNewAudit> = ({ closeLibrary, darkTheme }: TFCNewAudi
                 </div>
               )
             }
-            <audio ref={audioRef} src={links.audioLink} />
+            <audio ref={audioRef} src={links.audio} />
           </div>
         </div>
 
@@ -129,6 +161,7 @@ const NewAudio: React.FC<TFCNewAudit> = ({ closeLibrary, darkTheme }: TFCNewAudi
             backgroundColor="#159FED"
             borderRadius={0}
             className="new-audio__button"
+            onClick={onSubmit}
           >
             Добавить
               </Button>

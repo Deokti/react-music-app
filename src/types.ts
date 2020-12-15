@@ -28,9 +28,22 @@ export interface TLogInUser {
 
 export interface TSong {
   name: string,
-  cover: string
-  artist: string,
+  poster: string
+  author: string,
   audio: string,
   id: string,
   active: boolean,
+}
+
+export type TSongInfo = {
+  currentTimeSong: number
+  durationAudio: number
+}
+
+export type TSongDatabase = {
+  id: string
+  name: string
+  author: string
+  poster: string
+  audio: string
 }

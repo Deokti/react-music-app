@@ -1,17 +1,17 @@
 import React from 'react';
-import { TDarkTheme, TSong } from '../../types';
+import { TSong } from '../../types';
 import Button from '../button';
 import LibraryItem from './library-item';
 
 import './library.scss';
 
 interface ILibrary {
-  songs: Array<TSong>
+  songs: Array<TSong> | null
   changeCurrentSong: (id: string) => void
-  openLibrary: () => void
+  openNewAudio: () => void
 }
 
-const Library: React.FC<TDarkTheme & ILibrary> = ({ darkTheme, songs, changeCurrentSong, openLibrary }: TDarkTheme & ILibrary) => (
+const Library: React.FC<ILibrary> = ({ songs, changeCurrentSong, openNewAudio }: ILibrary) => (
   <div className="library">
     <div className="library-top">
       <h3 className="library__title">Библиотека</h3>
@@ -19,7 +19,7 @@ const Library: React.FC<TDarkTheme & ILibrary> = ({ darkTheme, songs, changeCurr
 
     <ul className="library__list">
       {
-        songs.map((song) => (
+        songs?.map((song) => (
           <li className="library__item" key={song.id}
             onClick={() => changeCurrentSong(song.id)}
           >
@@ -31,7 +31,7 @@ const Library: React.FC<TDarkTheme & ILibrary> = ({ darkTheme, songs, changeCurr
 
     <Button
       className="library__button"
-      onClick={openLibrary}
+      onClick={openNewAudio}
       borderRadius={0}
       height="5rem"
     >

@@ -1,33 +1,29 @@
-import React, { useRef, useState } from 'react';
+import React from 'react';
 
-import './player.scss';
 
 import PlayerButton from './player-button';
 import { ArrowIcon, PlayIcon, PauseIcon } from '../icon';
 import { getAudioTime } from '../utils/getAudioTime';
+import { TSongInfo } from '../../types';
+
+import './player.scss';
 
 type TFCPlayer = {
-  currentAudioSong: string
+  audioRef: any
+  songInfo: TSongInfo
+  currentAudioSong: string | undefined
   onSongPlay: boolean
   setOnSongPlay: (state: boolean) => void
+  setSongInfo: (state: any) => void
 }
 
-type TSongInfo = {
-  currentTimeSong: number
-  durationAudio: number
-}
-
-const Player: React.FC<TFCPlayer> = ({ currentAudioSong, onSongPlay, setOnSongPlay }: TFCPlayer) => {
-  const audioRef = useRef<HTMLAudioElement>(null);
-  const [songInfo, setSongInfo] = useState<TSongInfo>({
-    currentTimeSong: 0,
-    durationAudio: 0
-  });
+const Player: React.FC<TFCPlayer> = (
+  { audioRef, songInfo, currentAudioSong, onSongPlay, setOnSongPlay, setSongInfo }: TFCPlayer) => {
 
   const playSongHanlder = () => {
     const { current } = audioRef;
 
-    // Если true - значти мелодия игрет и её нужно остановить
+    // Если true - значит мелодия игрет и её нужно остановить
     if (onSongPlay) {
       current?.pause();
       setOnSongPlay(!onSongPlay);
@@ -48,13 +44,9 @@ const Player: React.FC<TFCPlayer> = ({ currentAudioSong, onSongPlay, setOnSongPl
   const dragHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     const currentTimeSong = Number(event.target.value);
 
+    // Установка времени при перетаскивании ползунка
     audioRef.current!.currentTime = currentTimeSong;
-    setSongInfo((prevState) => {
-      return {
-        ...prevState,
-        currentTimeSong
-      }
-    })
+    setSongInfo((prevState: TSongInfo) => ({ ...prevState, currentTimeSong }));
   }
 
   return (
@@ -86,7 +78,7 @@ const Player: React.FC<TFCPlayer> = ({ currentAudioSong, onSongPlay, setOnSongPl
         src={currentAudioSong}
         ref={audioRef}
         onTimeUpdate={timeUpdateHandler}
-        onLoadedData={timeUpdateHandler}
+        onLoadedMetadata={timeUpdateHandler}
       />
     </div>
   )
