@@ -6,9 +6,7 @@ import { PauseIcon, PlayIcon } from '../icon';
 import Input from '../input';
 import { v4 as uuidv4 } from "uuid";
 
-
 import './new-audio.scss';
-
 
 interface TFCNewAudit {
   closeNewAudio: () => void
@@ -27,6 +25,7 @@ const NewAudio: React.FC<TFCNewAudit> = ({ closeNewAudio }: TFCNewAudit) => {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [onPlay, setOnPlay] = useState<boolean>(false);
   const [links, setLinks] = useState<TLinks>(linksBase);
+  const [error, setError] = useState<string>('');
 
   const inputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.currentTarget;
@@ -57,6 +56,22 @@ const NewAudio: React.FC<TFCNewAudit> = ({ closeNewAudio }: TFCNewAudit) => {
       poster.trim().length && audio.trim().length;
   }
 
+  const linkСhecking = (link: string): boolean => {
+    if (/^(ftp|http|https):\/\/[^ "]+$/.test(link)) return true;
+
+    setError('Ссылка не соотвествует!');
+    return false;
+  }
+
+  const fieldHandling = (links: TLinks): boolean => {
+    if (!onInputEmpty(links)) {
+      setError('Все поля должны заполнены!');
+      return false;
+    }
+
+    return linkСhecking(links.audio) && linkСhecking(links.poster);
+  }
+
   const saveAudio = ({ name, author, poster, audio }: TLinks): TSongDatabase => {
     return {
       id: uuidv4(),
@@ -67,23 +82,20 @@ const NewAudio: React.FC<TFCNewAudit> = ({ closeNewAudio }: TFCNewAudit) => {
     };
   };
 
-  const onDatabaseSave = () => {
+  const onDatabaseSave = (links: TLinks) => {
     const audioData = saveAudio(links);
 
-    return database.ref(databaseRef.MUSICS).child(audioData.id).set(audioData);
+    return database.ref(databaseRef.MUSICS).push().set(audioData);
   }
-
 
   const onSubmit = (event: React.FormEvent<HTMLFormElement | HTMLButtonElement>) => {
     event.preventDefault();
+    setError('');
 
-    if (onInputEmpty(links)) {
-      onDatabaseSave();
+    if (fieldHandling(links)) {
+      onDatabaseSave(links);
       setLinks(linksBase);
       closeNewAudio();
-
-    } else {
-      console.error('Все поля должны быть заполнены!');
     }
   }
 
@@ -108,50 +120,53 @@ const NewAudio: React.FC<TFCNewAudit> = ({ closeNewAudio }: TFCNewAudit) => {
             value={links.author}
           />
         </div>
-        <div className="new-audio__inner">
-          <div className="new-audio__left">
+        <div className="new-audio__bottom">
+          <div className="new-audio__inner">
+            <div className="new-audio__left">
+              <Input
+                type="text"
+                inputTitle="Ссылка на картинку"
+                onChange={inputHandler}
+                name="poster"
+                color="#407fab"
+                value={links.poster}
+              />
+              <Input
+                type="text"
+                inputTitle="Ссылка на аудио (MP3)"
+                onChange={inputHandler}
+                name="audio"
+                color="#407fab"
+                value={links.audio}
+              />
+            </div>
 
-            <Input
-              type="text"
-              inputTitle="Ссылка на картинку"
-              onChange={inputHandler}
-              name="poster"
-              color="#407fab"
-              value={links.poster}
-            />
-            <Input
-              type="text"
-              inputTitle="Ссылка на аудио (MP3)"
-              onChange={inputHandler}
-              name="audio"
-              color="#407fab"
-              value={links.audio}
-            />
-          </div>
+            <div className="new-audio__preview">
+              <h4 className="new-audio__preview-title">Превью</h4>
 
-          <div className="new-audio__preview">
-            <h4 className="new-audio__preview-title">Превью</h4>
+              {/* Картика */}
+              {
+                links.poster && (
+                  <div className="new-audio__image" style={{ backgroundImage: "url(" + links.poster + ")" }}></div>
+                )
+              }
 
-            {/* Картика */}
-            {
-              links.poster && (
-                <div className="new-audio__image" style={{ backgroundImage: "url(" + links.poster + ")" }}></div>
-              )
-            }
-
-            {/* Аудио */}
-            {
-              links.audio && (
-                <div className="new-audio__audio">
-                  <input type="range" className="new-audio__range" />
-                  <div className="new-audio__state" onClick={playSongHanlder}>
-                    {onPlay ? <PauseIcon size={13} /> : <PlayIcon size={13} />}
+              {/* Аудио */}
+              {
+                links.audio && (
+                  <div className="new-audio__audio">
+                    <input type="range" className="new-audio__range" />
+                    <div className="new-audio__state" onClick={playSongHanlder}>
+                      {onPlay ? <PauseIcon size={13} /> : <PlayIcon size={13} />}
+                    </div>
                   </div>
-                </div>
-              )
-            }
-            <audio ref={audioRef} src={links.audio} />
+                )
+              }
+              <audio ref={audioRef} src={links.audio} />
+
+            </div>
           </div>
+          {error.length > 0 && <span className="new-audio__error">{error}</span>}
         </div>
 
         <div className="new-audio__buttons">

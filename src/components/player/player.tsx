@@ -9,16 +9,19 @@ import { TSongInfo } from '../../types';
 import './player.scss';
 
 type TFCPlayer = {
-  audioRef: any
+  audioRef: React.RefObject<HTMLAudioElement>
   songInfo: TSongInfo
   currentAudioSong: string | undefined
   onSongPlay: boolean
   setOnSongPlay: (state: boolean) => void
   setSongInfo: (state: any) => void
+  nextAudioSong: (state: string) => void
+  prevAudioSong: (state: string) => void
+  currentSongId: string | undefined
 }
 
 const Player: React.FC<TFCPlayer> = (
-  { audioRef, songInfo, currentAudioSong, onSongPlay, setOnSongPlay, setSongInfo }: TFCPlayer) => {
+  { audioRef, songInfo, currentAudioSong, onSongPlay, setOnSongPlay, setSongInfo, nextAudioSong, currentSongId, prevAudioSong }: TFCPlayer) => {
 
   const playSongHanlder = () => {
     const { current } = audioRef;
@@ -34,11 +37,21 @@ const Player: React.FC<TFCPlayer> = (
     setOnSongPlay(!onSongPlay);
   }
 
+  // Если песня закончилась
+  const timeEnded = (endAudio: boolean) => {
+    if (endAudio) {
+      setOnSongPlay(false);
+      nextAudioSong(currentSongId!);
+      console.log('Песня закончилась');
+    }
+  }
+
   const timeUpdateHandler = (event: React.SyntheticEvent<HTMLAudioElement>): void => {
     const currentTimeSong = event.currentTarget.currentTime
     const durationAudio = event.currentTarget.duration;
 
-    setSongInfo({ currentTimeSong, durationAudio })
+    setSongInfo({ currentTimeSong, durationAudio });
+    timeEnded(currentTimeSong === durationAudio);
   }
 
   const dragHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -69,9 +82,9 @@ const Player: React.FC<TFCPlayer> = (
       </div>
 
       <div className="player-control">
-        <PlayerButton Icon={ArrowIcon} left />
+        <PlayerButton Icon={ArrowIcon} left onClick={() => prevAudioSong(currentSongId!)} />
         <PlayerButton Icon={onSongPlay ? PauseIcon : PlayIcon} onClick={playSongHanlder} />
-        <PlayerButton Icon={ArrowIcon} />
+        <PlayerButton Icon={ArrowIcon} onClick={() => nextAudioSong(currentSongId!)} />
       </div>
 
       <audio

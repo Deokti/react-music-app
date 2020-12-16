@@ -8,8 +8,6 @@
   align-items: center;
   padding: 1.2rem 3rem;
 
-  @include hoverItem(var(--color-hover));
-
   &__cover {
     width: 5.3rem;
     height: 5.3rem;

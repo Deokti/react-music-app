@@ -15,6 +15,7 @@ type TApp = {
 }
 
 const App: React.FC<TLogInUser & TApp> = ({ logInUser, songs, firstSong }: TLogInUser & TApp) => {
+  const appRef = useRef<HTMLDivElement>(null);
   const audioRef = useRef<HTMLAudioElement>(null);
   const [currentSong, setCurrentSong] = useState<TSong>(firstSong);
   const [onSongPlay, setOnSongPlay] = useState<boolean>(false);
@@ -31,6 +32,41 @@ const App: React.FC<TLogInUser & TApp> = ({ logInUser, songs, firstSong }: TLogI
   const openNewAudio = () => setNewAudioState(true);
   const closeNewAudio = () => setNewAudioState(false);
 
+  const audioPrimisePlay = () => {
+    const audioPrimise = audioRef.current?.play();
+
+    audioPrimise?.then(() => {
+      audioRef.current?.play();
+      setOnSongPlay(true);
+    });
+  }
+
+  const prevAudioSong = async (id: string) => {
+    const songIndex = songs.findIndex((item) => item.id === id);
+    const selected = songs[songIndex - 1];
+
+    if (songIndex > 0) {
+      await setCurrentSong(selected);
+      await audioPrimisePlay();
+    }
+  }
+
+  const nextAudioSong = async (id: string) => {
+    const songIndex = songs.findIndex((item) => item.id === id);
+    const arraySongs = songs.length === (songIndex + 1);
+    const selected = songs[songIndex + 1];
+
+    if (arraySongs) {
+      await setCurrentSong(songs[0]);
+      await audioPrimisePlay();
+    } else {
+      // Несмотря на то, что написано
+      // Данный код влияет на работоспособность
+      await setCurrentSong(selected);
+      await audioPrimisePlay();
+    }
+  }
+
   const changeCurrentSong = (id: string) => {
     const selected = songs.find((item) => item.id === id);
 
@@ -42,16 +78,13 @@ const App: React.FC<TLogInUser & TApp> = ({ logInUser, songs, firstSong }: TLogI
         setOnSongPlay(false);
 
         // При переключении проверяем на существование и запускаем
-        audioPrimise?.then(() => {
-          audioRef.current?.play();
-          setOnSongPlay(true);
-        });
+        audioPrimisePlay();
       }
     };
   }
 
   const changeTheme = (currentTheme: string): void => {
-    document.documentElement.setAttribute('data-theme', currentTheme);
+    appRef.current?.setAttribute('data-theme', currentTheme)
   };
 
   useEffect(() => {
@@ -63,7 +96,7 @@ const App: React.FC<TLogInUser & TApp> = ({ logInUser, songs, firstSong }: TLogI
   }, [logInUser?.darkTheme])
 
   return (
-    <section className="app">
+    <section className="app" ref={appRef}>
       <Header logInUser={logInUser} />
 
       <div className="app-content">
@@ -72,14 +105,18 @@ const App: React.FC<TLogInUser & TApp> = ({ logInUser, songs, firstSong }: TLogI
           audioRef={audioRef}
           songInfo={songInfo}
           setSongInfo={setSongInfo}
+          currentSongId={currentSong?.id}
           currentAudioSong={currentSong?.audio}
           onSongPlay={onSongPlay}
           setOnSongPlay={setOnSongPlay}
+          nextAudioSong={nextAudioSong}
+          prevAudioSong={prevAudioSong}
         />
         <Library
           songs={songs}
           changeCurrentSong={changeCurrentSong}
           openNewAudio={openNewAudio}
+          currentSong={currentSong}
         />
 
         {newAudioState && <NewAudio closeNewAudio={closeNewAudio} />}

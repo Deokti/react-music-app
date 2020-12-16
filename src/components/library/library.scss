@@ -1,4 +1,5 @@
 @import '../../assets/style/theme.scss';
+@import '../../assets/style/mixins.scss';
 
 .library {
   position: fixed;
@@ -28,6 +29,7 @@
     height: 100%;
     overflow: hidden;
     overflow-y: auto;
+    list-style: none;
     padding-top: 2rem;
     padding-bottom: 9rem;
 
@@ -42,6 +44,17 @@
     &::-webkit-scrollbar-thumb {
       background: #565557;
       border: transparent;
+    }
+  }
+
+  &__item {
+
+    &:not(.active) {
+      @include hoverItem(var(--color-hover));
+    }
+
+    &.active {
+      background-color: rgba(var(--button-rgb), .2) !important;
     }
   }
 

@@ -9,9 +9,10 @@ interface ILibrary {
   songs: Array<TSong> | null
   changeCurrentSong: (id: string) => void
   openNewAudio: () => void
+  currentSong: TSong
 }
 
-const Library: React.FC<ILibrary> = ({ songs, changeCurrentSong, openNewAudio }: ILibrary) => (
+const Library: React.FC<ILibrary> = ({ songs, changeCurrentSong, openNewAudio, currentSong }: ILibrary) => (
   <div className="library">
     <div className="library-top">
       <h3 className="library__title">Библиотека</h3>
@@ -19,13 +20,18 @@ const Library: React.FC<ILibrary> = ({ songs, changeCurrentSong, openNewAudio }:
 
     <ul className="library__list">
       {
-        songs?.map((song) => (
-          <li className="library__item" key={song.id}
-            onClick={() => changeCurrentSong(song.id)}
-          >
-            <LibraryItem song={song} />
-          </li>
-        ))
+        songs?.map((song) => {
+          const active = currentSong?.id === song?.id;
+
+          return (
+            <li key={song.id}
+              className={`library__item ${active && 'active'}`.trim()}
+              onClick={() => changeCurrentSong(song.id)}
+            >
+              <LibraryItem song={song} />
+            </li>
+          )
+        })
       }
     </ul>
 
