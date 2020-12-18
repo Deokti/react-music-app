@@ -23,7 +23,8 @@ const App: React.FC<TLogInUser & TApp> = ({ logInUser, songs, firstSong }: TLogI
   const [libraryShow, setLibraryShow] = useState<boolean>(false);
   const [songInfo, setSongInfo] = useState<TSongInfo>({
     currentTimeSong: 0,
-    durationAudio: 0
+    durationAudio: 0,
+    trackAnimation: 0,
   });
 
   useEffect(() => {
@@ -32,8 +33,6 @@ const App: React.FC<TLogInUser & TApp> = ({ logInUser, songs, firstSong }: TLogI
 
   const openNewAudio = () => setNewAudioState(true);
   const closeNewAudio = () => setNewAudioState(false);
-  const openLibrary = () => setLibraryShow(true);
-  const closeLibrary = () => setLibraryShow(false);
 
   const audioPrimisePlay = () => {
     const audioPrimise = audioRef.current?.play();
@@ -46,28 +45,34 @@ const App: React.FC<TLogInUser & TApp> = ({ logInUser, songs, firstSong }: TLogI
 
   const prevAudioSong = async (id: string) => {
     const songIndex = songs.findIndex((item) => item.id === id);
-    const selected = songs[songIndex - 1];
 
     if (songIndex > 0) {
+      const selected = songs[songIndex - 1];
       await setCurrentSong(selected);
       await audioPrimisePlay();
+      return false;
     }
+
+    const endSong = songs[songs.length - 1];
+    await setCurrentSong(endSong);
+    await audioPrimisePlay();
   }
 
   const nextAudioSong = async (id: string) => {
     const songIndex = songs.findIndex((item) => item.id === id);
     const arraySongs = songs.length === (songIndex + 1);
-    const selected = songs[songIndex + 1];
 
     if (arraySongs) {
       await setCurrentSong(songs[0]);
       await audioPrimisePlay();
-    } else {
-      // Несмотря на то, что написано
-      // Данный код влияет на работоспособность
-      await setCurrentSong(selected);
-      await audioPrimisePlay();
+      return false;
     }
+
+    // Несмотря на то, что написано
+    // Данный код влияет на работоспособность
+    const selected = songs[songIndex + 1];
+    await setCurrentSong(selected);
+    await audioPrimisePlay();
   }
 
   const changeCurrentSong = (id: string) => {
@@ -105,7 +110,6 @@ const App: React.FC<TLogInUser & TApp> = ({ logInUser, songs, firstSong }: TLogI
         libraryShow={libraryShow}
         currentSong={currentSong}
       />
-
 
       <div className="app-content">
         <Header

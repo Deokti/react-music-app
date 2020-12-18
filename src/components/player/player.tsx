@@ -49,8 +49,9 @@ const Player: React.FC<TFCPlayer> = (
   const timeUpdateHandler = (event: React.SyntheticEvent<HTMLAudioElement>): void => {
     const currentTimeSong = event.currentTarget.currentTime
     const durationAudio = event.currentTarget.duration;
+    const trackAnimation = Math.floor((Math.floor(currentTimeSong) / Math.floor(durationAudio)) * 100);
 
-    setSongInfo({ currentTimeSong, durationAudio });
+    setSongInfo({ currentTimeSong, durationAudio, trackAnimation });
     timeEnded(currentTimeSong === durationAudio);
   }
 
@@ -62,6 +63,10 @@ const Player: React.FC<TFCPlayer> = (
     setSongInfo((prevState: TSongInfo) => ({ ...prevState, currentTimeSong }));
   }
 
+  const tracknimation = {
+    transform: `translateX(${songInfo.trackAnimation}%)`
+  };
+
   return (
     <div className="player">
       <div className="player-time">
@@ -69,22 +74,42 @@ const Player: React.FC<TFCPlayer> = (
           className="player-time__item player-current-time">
           {getAudioTime(songInfo.currentTimeSong)}
         </span>
-        <input
-          type="range"
-          className="player-time__lenght"
-          min={0}
-          value={songInfo.currentTimeSong}
-          max={songInfo.durationAudio || 0}
-          onChange={dragHandler} />
+        <div className="player-track">
+          <input
+            type="range"
+            className="player-track__input"
+            min={0}
+            value={songInfo.currentTimeSong}
+            max={songInfo.durationAudio || 0}
+            onChange={dragHandler}
+          />
+          <span
+            className="player-track__animate"
+            style={tracknimation} />
+        </div>
+
         <span className="player-time__item player-duration">
           {getAudioTime(songInfo.durationAudio || 0)}
         </span>
       </div>
 
       <div className="player-control">
-        <PlayerButton Icon={ArrowIcon} left onClick={() => prevAudioSong(currentSongId!)} />
-        <PlayerButton Icon={onSongPlay ? PauseIcon : PlayIcon} onClick={playSongHanlder} />
-        <PlayerButton Icon={ArrowIcon} onClick={() => nextAudioSong(currentSongId!)} />
+        <PlayerButton
+          title="Назад"
+          Icon={ArrowIcon}
+          left
+          onClick={() => prevAudioSong(currentSongId!)}
+        />
+        <PlayerButton
+          title={onSongPlay ? 'Пауза' : 'Продолжить'}
+          Icon={onSongPlay ? PauseIcon : PlayIcon}
+          onClick={playSongHanlder}
+        />
+        <PlayerButton
+          title="Вперёд"
+          Icon={ArrowIcon}
+          onClick={() => nextAudioSong(currentSongId!)}
+        />
       </div>
 
       <audio
