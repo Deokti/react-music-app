@@ -55,7 +55,8 @@ const MainRoot: React.FC<TFCMainRoot> = ({ history }: TFCMainRoot) => {
           isLoaded: false,
           logInUser: null
         });
-        history.push(routePath.login)
+        history.push(routePath.login);
+        setSongs([]);
       }
     });
   }, [getDataUserDatabase, history]);
@@ -70,7 +71,7 @@ const MainRoot: React.FC<TFCMainRoot> = ({ history }: TFCMainRoot) => {
   }, [onAuthStateChanged]);
 
   return (
-    <main className="main-root">
+    <React.Fragment>
       {
         loggedUser.isLoaded
           ? <Spinner />
@@ -86,7 +87,7 @@ const MainRoot: React.FC<TFCMainRoot> = ({ history }: TFCMainRoot) => {
             <Route path={routePath.register} component={Register} />
           </Switch>)
       }
-    </main>
+    </React.Fragment>
   )
 };
 

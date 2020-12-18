@@ -22,4 +22,12 @@
   transition: color .25s cubic-bezier(.02, .01, .47, 1),
     background-color .25s cubic-bezier(.02, .01, .47, 1),
     fill .25s cubic-bezier(.02, .01, .47, 1),
+    width .25s cubic-bezier(.02, .01, .47, 1),
+    opacity .1s cubic-bezier(.02, .01, .47, 1)
+}
+
+.library__item,
+.library__button {
+  transition: opacity .2s cubic-bezier(.02, .01, .47, 1);
+  transition-delay: .2s;
 }

@@ -38,6 +38,7 @@ export interface TSong {
 export type TSongInfo = {
   currentTimeSong: number
   durationAudio: number
+  trackAnimation: number
 }
 
 export type TSongDatabase = {

@@ -1,17 +1,19 @@
 @import '../../assets/style/theme.scss';
+@import '../../assets/style/mixins.scss';
 
 .library {
-  position: fixed;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  width: 41.3rem;
+  position: relative;
   height: 100%;
   z-index: 10;
   box-shadow: var(--large-shadow);
   padding-bottom: 5rem;
   background-color: var(--additional-background);
+  // margin-left: -50rem;
+  // transform: translateX(-100%);
 
+  width: 0;
+  overflow: hidden;
+  opacity: 0;
 
   &__title {
     min-height: 7rem;
@@ -28,6 +30,7 @@
     height: 100%;
     overflow: hidden;
     overflow-y: auto;
+    list-style: none;
     padding-top: 2rem;
     padding-bottom: 9rem;
 
@@ -45,10 +48,40 @@
     }
   }
 
+  &__item {
+
+    &:not(.active) {
+      @include hoverItem(var(--color-hover));
+    }
+
+    &.active {
+      background-color: rgba(var(--button-rgb), .2) !important;
+    }
+  }
+
+  &__button,
+  &__item {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+
   &__button {
     position: absolute;
     bottom: 0;
     z-index: 30;
     background-color: var(--button) !important;
+  }
+
+  &.library-open {
+    width: 50rem;
+    overflow: visible;
+    opacity: 1;
+
+    .library__item,
+    .library__button {
+      opacity: 1;
+      transform: translateX(0%);
+    }
+
   }
 }
