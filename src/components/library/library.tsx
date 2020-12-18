@@ -10,10 +10,11 @@ interface ILibrary {
   changeCurrentSong: (id: string) => void
   openNewAudio: () => void
   currentSong: TSong
+  libraryShow: boolean
 }
 
-const Library: React.FC<ILibrary> = ({ songs, changeCurrentSong, openNewAudio, currentSong }: ILibrary) => (
-  <div className="library">
+const Library: React.FC<ILibrary> = ({ songs, changeCurrentSong, openNewAudio, currentSong, libraryShow }: ILibrary) => (
+  <div className={`library ${libraryShow && 'library-open'}`}>
     <div className="library-top">
       <h3 className="library__title">Библиотека</h3>
     </div>

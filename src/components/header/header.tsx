@@ -10,9 +10,11 @@ import { database, databaseRef } from '../../config/firebase';
 
 type TFCHeader = {
   logInUser: TDatabaseSaveUser | null | undefined
+  libraryShow: boolean
+  setLibraryShow: (state: boolean) => void
 }
 
-const Header: React.FC<TFCHeader> = ({ logInUser }: TFCHeader) => {
+const Header: React.FC<TFCHeader> = ({ logInUser, libraryShow, setLibraryShow }: TFCHeader) => {
   const [showMenu, setShowMenu] = useState<boolean>(false);
 
 
@@ -28,7 +30,7 @@ const Header: React.FC<TFCHeader> = ({ logInUser }: TFCHeader) => {
 
   return (
     <header className="header">
-      <OpenLibrary />
+      <OpenLibrary open={libraryShow} onClick={() => setLibraryShow(!libraryShow)} />
 
       <div className="header__right">
         <div className="header__user">

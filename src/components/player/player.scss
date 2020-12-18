@@ -8,7 +8,8 @@
   flex-direction: column;
 
   &-time {
-    width: 30%;
+    max-width: 55rem;
+    width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;

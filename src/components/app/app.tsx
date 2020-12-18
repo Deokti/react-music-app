@@ -20,6 +20,7 @@ const App: React.FC<TLogInUser & TApp> = ({ logInUser, songs, firstSong }: TLogI
   const [currentSong, setCurrentSong] = useState<TSong>(firstSong);
   const [onSongPlay, setOnSongPlay] = useState<boolean>(false);
   const [newAudioState, setNewAudioState] = useState<boolean>(false);
+  const [libraryShow, setLibraryShow] = useState<boolean>(false);
   const [songInfo, setSongInfo] = useState<TSongInfo>({
     currentTimeSong: 0,
     durationAudio: 0
@@ -31,6 +32,8 @@ const App: React.FC<TLogInUser & TApp> = ({ logInUser, songs, firstSong }: TLogI
 
   const openNewAudio = () => setNewAudioState(true);
   const closeNewAudio = () => setNewAudioState(false);
+  const openLibrary = () => setLibraryShow(true);
+  const closeLibrary = () => setLibraryShow(false);
 
   const audioPrimisePlay = () => {
     const audioPrimise = audioRef.current?.play();
@@ -72,8 +75,6 @@ const App: React.FC<TLogInUser & TApp> = ({ logInUser, songs, firstSong }: TLogI
 
     if (selected) {
       if (selected?.id !== currentSong.id) {
-        const audioPrimise = audioRef.current?.play();
-
         setCurrentSong(selected);
         setOnSongPlay(false);
 
@@ -97,9 +98,21 @@ const App: React.FC<TLogInUser & TApp> = ({ logInUser, songs, firstSong }: TLogI
 
   return (
     <section className="app" ref={appRef}>
-      <Header logInUser={logInUser} />
+      <Library
+        songs={songs}
+        changeCurrentSong={changeCurrentSong}
+        openNewAudio={openNewAudio}
+        libraryShow={libraryShow}
+        currentSong={currentSong}
+      />
+
 
       <div className="app-content">
+        <Header
+          logInUser={logInUser}
+          libraryShow={libraryShow}
+          setLibraryShow={setLibraryShow}
+        />
         <Song currentSong={currentSong} />
         <Player
           audioRef={audioRef}
@@ -111,12 +124,6 @@ const App: React.FC<TLogInUser & TApp> = ({ logInUser, songs, firstSong }: TLogI
           setOnSongPlay={setOnSongPlay}
           nextAudioSong={nextAudioSong}
           prevAudioSong={prevAudioSong}
-        />
-        <Library
-          songs={songs}
-          changeCurrentSong={changeCurrentSong}
-          openNewAudio={openNewAudio}
-          currentSong={currentSong}
         />
 
         {newAudioState && <NewAudio closeNewAudio={closeNewAudio} />}
