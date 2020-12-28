@@ -1,12 +1,14 @@
 import React, { useMemo, useRef, useState } from 'react';
 import { database, databaseRef } from '../../config/firebase';
-import { TSongDatabase } from '../../types';
+import { TSongDatabase, TSongInfo } from '../../types';
 import Button from '../button';
 import { PauseIcon, PlayIcon } from '../icon';
 import Input from '../input';
 import { v4 as uuidv4 } from "uuid";
 
 import './new-audio.scss';
+import AudioRange from '../../audio-range';
+import { convertTimeToPercent } from '../utils/convert-time-to-percent';
 
 interface TFCNewAudit {
   closeNewAudio: () => void
@@ -26,6 +28,12 @@ const NewAudio: React.FC<TFCNewAudit> = ({ closeNewAudio }: TFCNewAudit) => {
   const [onPlay, setOnPlay] = useState<boolean>(false);
   const [links, setLinks] = useState<TLinks>(linksBase);
   const [error, setError] = useState<string>('');
+  const [songInfo, setSongInfo] = useState<TSongInfo>({
+    currentTimeSong: 0,
+    durationAudio: 0,
+    trackAnimation: 0,
+  });
+
 
   const inputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.currentTarget;
@@ -99,6 +107,22 @@ const NewAudio: React.FC<TFCNewAudit> = ({ closeNewAudio }: TFCNewAudit) => {
     }
   }
 
+  const timeUpdateHandler = (event: React.SyntheticEvent<HTMLAudioElement>): void => {
+    const currentTimeSong = event.currentTarget.currentTime
+    const durationAudio = event.currentTarget.duration;
+    const trackAnimation = convertTimeToPercent(currentTimeSong, durationAudio);
+
+    setSongInfo({ currentTimeSong, durationAudio, trackAnimation });
+  }
+
+  const dragHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const currentTimeSong = Number(event.target.value);
+
+    // Установка времени при перетаскивании ползунка
+    audioRef.current!.currentTime = currentTimeSong;
+    setSongInfo((prevState: TSongInfo) => ({ ...prevState, currentTimeSong }));
+  }
+
   return (
     <div className="new-audio">
       <form className="new-audio__body" onSubmit={onSubmit}>
@@ -155,15 +179,23 @@ const NewAudio: React.FC<TFCNewAudit> = ({ closeNewAudio }: TFCNewAudit) => {
               {
                 links.audio && (
                   <div className="new-audio__audio">
-                    <input type="range" className="new-audio__range" />
+                    <AudioRange
+                      value={songInfo.currentTimeSong}
+                      max={songInfo.durationAudio}
+                      trackAnimation={songInfo.trackAnimation}
+                      onChange={dragHandler}
+                    />
+                    <audio
+                      ref={audioRef}
+                      src={links.audio}
+                      onTimeUpdate={timeUpdateHandler}
+                    />
                     <div className="new-audio__state" onClick={playSongHanlder}>
                       {onPlay ? <PauseIcon size={13} /> : <PlayIcon size={13} />}
                     </div>
                   </div>
                 )
               }
-              <audio ref={audioRef} src={links.audio} />
-
             </div>
           </div>
           {error.length > 0 && <span className="new-audio__error">{error}</span>}
