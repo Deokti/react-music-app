@@ -1,27 +1,31 @@
 import React from 'react';
 
-
 import PlayerButton from './player-button';
 import { ArrowIcon, PlayIcon, PauseIcon } from '../icon';
 import { getAudioTime } from '../utils/getAudioTime';
 import { TSongInfo } from '../../types';
+import AudioRange from '../../audio-range';
 
 import './player.scss';
 
 type TFCPlayer = {
-  audioRef: React.RefObject<HTMLAudioElement>
-  songInfo: TSongInfo
   currentAudioSong: string | undefined
   onSongPlay: boolean
   setOnSongPlay: (state: boolean) => void
-  setSongInfo: (state: any) => void
   nextAudioSong: (state: string) => void
   prevAudioSong: (state: string) => void
   currentSongId: string | undefined
+
+  audioRef: React.RefObject<HTMLAudioElement>
+  songInfo: TSongInfo
+  timeUpdateHandler: (event: any) => void
+  dragHandler: (event: React.ChangeEvent<HTMLInputElement>) => void
 }
 
 const Player: React.FC<TFCPlayer> = (
-  { audioRef, songInfo, currentAudioSong, onSongPlay, setOnSongPlay, setSongInfo, nextAudioSong, currentSongId, prevAudioSong }: TFCPlayer) => {
+  { audioRef, currentAudioSong, onSongPlay, setOnSongPlay, nextAudioSong,
+    currentSongId, prevAudioSong, songInfo, timeUpdateHandler, dragHandler
+  }: TFCPlayer) => {
 
   const playSongHanlder = () => {
     const { current } = audioRef;
@@ -46,26 +50,13 @@ const Player: React.FC<TFCPlayer> = (
     }
   }
 
-  const timeUpdateHandler = (event: React.SyntheticEvent<HTMLAudioElement>): void => {
-    const currentTimeSong = event.currentTarget.currentTime
-    const durationAudio = event.currentTarget.duration;
-    const trackAnimation = Math.floor((Math.floor(currentTimeSong) / Math.floor(durationAudio)) * 100);
+  const onTimeUpdateHandler = (event: React.SyntheticEvent<HTMLAudioElement, Event>) => {
+    const currentTime = event.currentTarget.currentTime;
+    const durationTime = event.currentTarget.duration;
 
-    setSongInfo({ currentTimeSong, durationAudio, trackAnimation });
-    timeEnded(currentTimeSong === durationAudio);
+    timeUpdateHandler(event);
+    timeEnded(currentTime === durationTime);
   }
-
-  const dragHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const currentTimeSong = Number(event.target.value);
-
-    // Установка времени при перетаскивании ползунка
-    audioRef.current!.currentTime = currentTimeSong;
-    setSongInfo((prevState: TSongInfo) => ({ ...prevState, currentTimeSong }));
-  }
-
-  const tracknimation = {
-    transform: `translateX(${songInfo.trackAnimation}%)`
-  };
 
   return (
     <div className="player">
@@ -74,20 +65,12 @@ const Player: React.FC<TFCPlayer> = (
           className="player-time__item player-current-time">
           {getAudioTime(songInfo.currentTimeSong)}
         </span>
-        <div className="player-track">
-          <input
-            type="range"
-            className="player-track__input"
-            min={0}
-            value={songInfo.currentTimeSong}
-            max={songInfo.durationAudio || 0}
-            onChange={dragHandler}
-          />
-          <span
-            className="player-track__animate"
-            style={tracknimation} />
-        </div>
-
+        <AudioRange
+          value={songInfo.currentTimeSong}
+          max={songInfo.durationAudio}
+          trackAnimation={songInfo.trackAnimation}
+          onChange={dragHandler}
+        />
         <span className="player-time__item player-duration">
           {getAudioTime(songInfo.durationAudio || 0)}
         </span>
@@ -115,8 +98,8 @@ const Player: React.FC<TFCPlayer> = (
       <audio
         src={currentAudioSong}
         ref={audioRef}
-        onTimeUpdate={timeUpdateHandler}
-        onLoadedMetadata={timeUpdateHandler}
+        onTimeUpdate={onTimeUpdateHandler}
+        onLoadedMetadata={onTimeUpdateHandler}
       />
     </div>
   )

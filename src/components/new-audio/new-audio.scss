@@ -92,7 +92,12 @@
   }
 
   &__state {
+    cursor: pointer;
     padding-left: .9rem;
+
+    svg {
+      display: flex;
+    }
 
     svg path {
       fill: var(--text-color);

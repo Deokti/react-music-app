@@ -1,15 +1,21 @@
 import React, { useMemo, useRef, useState } from 'react';
 import { database, databaseRef } from '../../config/firebase';
-import { TSongDatabase } from '../../types';
+import { TSongDatabase, TSongInfo } from '../../types';
 import Button from '../button';
 import { PauseIcon, PlayIcon } from '../icon';
 import Input from '../input';
 import { v4 as uuidv4 } from "uuid";
 
 import './new-audio.scss';
+import AudioRange from '../../audio-range';
+import { withAudioControl } from '../HOC/with-audio-control';
 
 interface TFCNewAudit {
   closeNewAudio: () => void
+  audioRef: React.MutableRefObject<any>
+  songInfo: TSongInfo
+  timeUpdateHandler: (event: any) => void
+  dragHandler: (event: React.ChangeEvent<HTMLInputElement>) => void
 }
 
 type TLinks = {
@@ -19,10 +25,9 @@ type TLinks = {
   author: string
 }
 
-const NewAudio: React.FC<TFCNewAudit> = ({ closeNewAudio }: TFCNewAudit) => {
+const NewAudio: React.FC<TFCNewAudit> = ({ closeNewAudio, audioRef, songInfo, timeUpdateHandler, dragHandler }: TFCNewAudit) => {
   const linksBase = useMemo(() => ({ name: '', author: '', poster: '', audio: '' }), []);
 
-  const audioRef = useRef<HTMLAudioElement>(null);
   const [onPlay, setOnPlay] = useState<boolean>(false);
   const [links, setLinks] = useState<TLinks>(linksBase);
   const [error, setError] = useState<string>('');
@@ -155,15 +160,23 @@ const NewAudio: React.FC<TFCNewAudit> = ({ closeNewAudio }: TFCNewAudit) => {
               {
                 links.audio && (
                   <div className="new-audio__audio">
-                    <input type="range" className="new-audio__range" />
+                    <AudioRange
+                      value={songInfo.currentTimeSong}
+                      max={songInfo.durationAudio}
+                      trackAnimation={songInfo.trackAnimation}
+                      onChange={dragHandler}
+                    />
+                    <audio
+                      ref={audioRef}
+                      src={links.audio}
+                      onTimeUpdate={timeUpdateHandler}
+                    />
                     <div className="new-audio__state" onClick={playSongHanlder}>
                       {onPlay ? <PauseIcon size={13} /> : <PlayIcon size={13} />}
                     </div>
                   </div>
                 )
               }
-              <audio ref={audioRef} src={links.audio} />
-
             </div>
           </div>
           {error.length > 0 && <span className="new-audio__error">{error}</span>}
@@ -197,4 +210,4 @@ const NewAudio: React.FC<TFCNewAudit> = ({ closeNewAudio }: TFCNewAudit) => {
 };
 
 
-export default NewAudio;
+export default withAudioControl()(NewAudio);

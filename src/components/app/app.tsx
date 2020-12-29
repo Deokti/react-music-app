@@ -8,24 +8,25 @@ import NewAudio from '../new-audio';
 import { TLogInUser, TSong, TSongInfo } from '../../types';
 
 import './app.scss';
+import { withAudioControl } from '../HOC/with-audio-control';
 
 type TApp = {
   songs: Array<TSong>
   firstSong: TSong
+  audioRef: React.MutableRefObject<any>
+  songInfo: TSongInfo
+  timeUpdateHandler: (event: any) => void
+  dragHandler: (event: React.ChangeEvent<HTMLInputElement>) => void
 }
 
-const App: React.FC<TLogInUser & TApp> = ({ logInUser, songs, firstSong }: TLogInUser & TApp) => {
+const App: React.FC<TLogInUser & TApp> = (
+  { logInUser, songs, firstSong, audioRef, songInfo, timeUpdateHandler, dragHandler }: TLogInUser & TApp) => {
+
   const appRef = useRef<HTMLDivElement>(null);
-  const audioRef = useRef<HTMLAudioElement>(null);
   const [currentSong, setCurrentSong] = useState<TSong>(firstSong);
   const [onSongPlay, setOnSongPlay] = useState<boolean>(false);
   const [newAudioState, setNewAudioState] = useState<boolean>(false);
   const [libraryShow, setLibraryShow] = useState<boolean>(false);
-  const [songInfo, setSongInfo] = useState<TSongInfo>({
-    currentTimeSong: 0,
-    durationAudio: 0,
-    trackAnimation: 0,
-  });
 
   useEffect(() => {
     setCurrentSong(firstSong);
@@ -120,10 +121,11 @@ const App: React.FC<TLogInUser & TApp> = ({ logInUser, songs, firstSong }: TLogI
         <Song currentSong={currentSong} />
         <Player
           audioRef={audioRef}
-          songInfo={songInfo}
-          setSongInfo={setSongInfo}
           currentSongId={currentSong?.id}
           currentAudioSong={currentSong?.audio}
+          songInfo={songInfo}
+          timeUpdateHandler={timeUpdateHandler}
+          dragHandler={dragHandler}
           onSongPlay={onSongPlay}
           setOnSongPlay={setOnSongPlay}
           nextAudioSong={nextAudioSong}
@@ -136,4 +138,4 @@ const App: React.FC<TLogInUser & TApp> = ({ logInUser, songs, firstSong }: TLogI
   )
 };
 
-export default App;
+export default withAudioControl()(App);
