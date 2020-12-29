@@ -8,10 +8,14 @@ import { v4 as uuidv4 } from "uuid";
 
 import './new-audio.scss';
 import AudioRange from '../../audio-range';
-import { convertTimeToPercent } from '../utils/convert-time-to-percent';
+import { withAudioControl } from '../HOC/with-audio-control';
 
 interface TFCNewAudit {
   closeNewAudio: () => void
+  audioRef: React.MutableRefObject<any>
+  songInfo: TSongInfo
+  timeUpdateHandler: (event: any) => void
+  dragHandler: (event: React.ChangeEvent<HTMLInputElement>) => void
 }
 
 type TLinks = {
@@ -21,19 +25,12 @@ type TLinks = {
   author: string
 }
 
-const NewAudio: React.FC<TFCNewAudit> = ({ closeNewAudio }: TFCNewAudit) => {
+const NewAudio: React.FC<TFCNewAudit> = ({ closeNewAudio, audioRef, songInfo, timeUpdateHandler, dragHandler }: TFCNewAudit) => {
   const linksBase = useMemo(() => ({ name: '', author: '', poster: '', audio: '' }), []);
 
-  const audioRef = useRef<HTMLAudioElement>(null);
   const [onPlay, setOnPlay] = useState<boolean>(false);
   const [links, setLinks] = useState<TLinks>(linksBase);
   const [error, setError] = useState<string>('');
-  const [songInfo, setSongInfo] = useState<TSongInfo>({
-    currentTimeSong: 0,
-    durationAudio: 0,
-    trackAnimation: 0,
-  });
-
 
   const inputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.currentTarget;
@@ -105,22 +102,6 @@ const NewAudio: React.FC<TFCNewAudit> = ({ closeNewAudio }: TFCNewAudit) => {
       setLinks(linksBase);
       closeNewAudio();
     }
-  }
-
-  const timeUpdateHandler = (event: React.SyntheticEvent<HTMLAudioElement>): void => {
-    const currentTimeSong = event.currentTarget.currentTime
-    const durationAudio = event.currentTarget.duration;
-    const trackAnimation = convertTimeToPercent(currentTimeSong, durationAudio);
-
-    setSongInfo({ currentTimeSong, durationAudio, trackAnimation });
-  }
-
-  const dragHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const currentTimeSong = Number(event.target.value);
-
-    // Установка времени при перетаскивании ползунка
-    audioRef.current!.currentTime = currentTimeSong;
-    setSongInfo((prevState: TSongInfo) => ({ ...prevState, currentTimeSong }));
   }
 
   return (
@@ -229,4 +210,4 @@ const NewAudio: React.FC<TFCNewAudit> = ({ closeNewAudio }: TFCNewAudit) => {
 };
 
 
-export default NewAudio;
+export default withAudioControl()(NewAudio);
